@@ -1,0 +1,3 @@
+[submodule "pmdb"]
+	path = pmdb
+	url = git://github.com/Thoronador/pmdb.git
