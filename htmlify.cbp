@@ -33,6 +33,7 @@
 			<Add option="-fexceptions" />
 			<Add option="-DNO_SMILIES_IN_PARSER" />
 		</Compiler>
+		<Unit filename="TrimmingBBCodes.h" />
 		<Unit filename="handleSpecialChars.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="pmdb/MsgTemplate.cpp" />

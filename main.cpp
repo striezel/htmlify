@@ -28,6 +28,7 @@
 #include "pmdb/MsgTemplate.h"
 #include "pmdb/bbcode/BBCode.h"
 #include "pmdb/bbcode/BBCodeParser.h"
+#include "TrimmingBBCodes.h"
 
 //return codes
 const int rcInvalidParameter = 1;
@@ -56,7 +57,7 @@ void showGPLNotice()
 void showVersion()
 {
   showGPLNotice();
-  std::cout << "htmlify, version 0.01, 2012-09-26\n";
+  std::cout << "htmlify, version 0.02, 2012-09-27\n";
 }
 
 void showHelp(const std::string& name)
@@ -74,7 +75,8 @@ void showHelp(const std::string& name)
             << "  --html           - uses HTML (4.01) syntax for generated files. Enabled by\n"
             << "                     default.\n"
             << "  --xhtml          - uses XHTML syntax for generated files. Mutually exclusive\n"
-            << "                     with --html.\n";
+            << "                     with --html.\n"
+            << "  --trim=PREFIX    - removes PREFIX from link URLs, if they start with PREFIX.\n";
 }
 
 int main(int argc, char **argv)
@@ -82,6 +84,7 @@ int main(int argc, char **argv)
   std::set<std::string> pathTexts;
   bool doXHTML = false;
   bool htmlModeSpecified = false;
+  std::string trimmablePrefix = "";
 
   if ((argc>1) and (argv!=NULL))
   {
@@ -125,6 +128,36 @@ int main(int argc, char **argv)
           doXHTML = true;
           htmlModeSpecified = true;
         }//param == xhtml
+        else if ((param=="-t") or (param=="--trim"))
+        {
+          if ((i+1<argc) and (argv[i+1]!=NULL))
+          {
+            if (!trimmablePrefix.empty())
+            {
+              std::cout << "Parameter "<<param<<" must not occur more than once!\n";
+              return rcInvalidParameter;
+            }
+            trimmablePrefix = std::string(argv[i+1]);
+            ++i; //skip next parameter, because it's used as prefix already
+            std::cout << "Trimmable prefix was set to \""<<trimmablePrefix<<"\".\n";
+          }
+          else
+          {
+            std::cout << "Error: You have to specify a string after \""
+                      << param <<"\".\n";
+            return rcInvalidParameter;
+          }
+        }//param == trim
+        else if ((param.substr(0,7)=="--trim=") and (param.length()>7))
+        {
+          if (!trimmablePrefix.empty())
+          {
+            std::cout << "Parameter --trim must not occur more than once!\n";
+            return rcInvalidParameter;
+          }
+          trimmablePrefix = param.substr(7);
+          std::cout << "Trimmable prefix was set to \""<<trimmablePrefix<<"\".\n";
+        }//param == trim (single parameter version)
         else if (FileExists(param))
         {
           if (pathTexts.find(param)!=pathTexts.end())
@@ -182,10 +215,12 @@ int main(int argc, char **argv)
   //simple url tag
   MsgTemplate tpl;
   tpl.loadFromString("<a href=\"{..inner..}\" target=\"_blank\">{..inner..}</a>");
-  SimpleTemplateBBCode url_simple("url", tpl, "inner");
+  SimpleTplAmpTransformBBCode url_simple("url", tpl, "inner");
+  SimpleTrimBBCode url_simple_trim("url", tpl, "inner", trimmablePrefix);
   //advanced url tag
   tpl.loadFromString("<a href=\"{..attribute..}\" target=\"_blank\">{..inner..}</a>");
-  AdvancedTemplateBBCode url_advanced("url", tpl, "inner", "attribute");
+  AdvancedTplAmpTransformBBCode url_advanced("url", tpl, "inner", "attribute");
+  AdvancedTrimBBCode url_advanced_trim("url", tpl, "inner", "attribute", trimmablePrefix);
   //color tags
   tpl.loadFromString("<font color=\"{..attr..}\">{..inner..}</font>");
   AdvancedTemplateBBCode color("color", tpl, "inner", "attr");
@@ -206,8 +241,16 @@ int main(int argc, char **argv)
   parser.addCode(&left);
   parser.addCode(&right);
   parser.addCode(&img_simple);
-  parser.addCode(&url_simple);
-  parser.addCode(&url_advanced);
+  if (trimmablePrefix.empty())
+  {
+    parser.addCode(&url_simple);
+    parser.addCode(&url_advanced);
+  }
+  else
+  {
+    parser.addCode(&url_simple_trim);
+    parser.addCode(&url_advanced_trim);
+  }
   parser.addCode(&color);
   parser.addCode(&size);
 
