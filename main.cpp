@@ -24,6 +24,7 @@
 #include <string>
 #include <cstring>
 #include "pmdb/libthoro/common/FileFunctions.h"
+#include "pmdb/libthoro/common/StringConversion.h"
 #include "handleSpecialChars.h"
 #include "pmdb/MsgTemplate.h"
 #include "pmdb/bbcode/BBCode.h"
@@ -33,6 +34,7 @@
 //return codes
 const int rcInvalidParameter = 1;
 const int rcFileError        = 2;
+const int rcConversionFail   = 3;
 
 void showGPLNotice()
 {
@@ -57,7 +59,7 @@ void showGPLNotice()
 void showVersion()
 {
   showGPLNotice();
-  std::cout << "htmlify, version 0.02, 2012-09-27\n";
+  std::cout << "htmlify, version 0.03, 2012-09-28\n";
 }
 
 void showHelp(const std::string& name)
@@ -76,7 +78,9 @@ void showHelp(const std::string& name)
             << "                     default.\n"
             << "  --xhtml          - uses XHTML syntax for generated files. Mutually exclusive\n"
             << "                     with --html.\n"
-            << "  --trim=PREFIX    - removes PREFIX from link URLs, if they start with PREFIX.\n";
+            << "  --trim=PREFIX    - removes PREFIX from link URLs, if they start with PREFIX.\n"
+            << "  --utf8           - content of input files is encoded in UTF-8 and will be\n"
+            << "                     converted to ISO-8859-15 before processing.\n";
 }
 
 int main(int argc, char **argv)
@@ -85,6 +89,7 @@ int main(int argc, char **argv)
   bool doXHTML = false;
   bool htmlModeSpecified = false;
   std::string trimmablePrefix = "";
+  bool isUTF8 = false;
 
   if ((argc>1) and (argv!=NULL))
   {
@@ -158,6 +163,15 @@ int main(int argc, char **argv)
           trimmablePrefix = param.substr(7);
           std::cout << "Trimmable prefix was set to \""<<trimmablePrefix<<"\".\n";
         }//param == trim (single parameter version)
+        else if ((param=="--utf8") or (param=="--UTF-8"))
+        {
+          if (isUTF8)
+          {
+            std::cout << "Parameter "<<param<<" must not occur more than once!\n";
+            return rcInvalidParameter;
+          }
+          isUTF8 = true;
+        }//param == utf8
         else if (FileExists(param))
         {
           if (pathTexts.find(param)!=pathTexts.end())
@@ -301,6 +315,18 @@ int main(int argc, char **argv)
     std::string content(buffer);
     delete[] buffer;
     buffer = NULL;
+
+    if (isUTF8)
+    {
+      //convert content to iso-8859-15
+      std::string iso_content;
+      if (!Thoro::utf8_to_iso8859_15(content, iso_content))
+      {
+        std::cout << "Error: Conversion from UTF-8 failed!\n";
+        return rcConversionFail;
+      }
+      content = iso_content;
+    }//if UTF-8
 
     handleSpecialChars(content);
     content = parser.parse(content, "", doXHTML, false);

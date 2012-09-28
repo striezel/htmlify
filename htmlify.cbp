@@ -46,6 +46,7 @@
 		<Unit filename="pmdb/bbcode/quotes.h" />
 		<Unit filename="pmdb/libthoro/common/FileFunctions.cpp" />
 		<Unit filename="pmdb/libthoro/common/FileFunctions.h" />
+		<Unit filename="pmdb/libthoro/common/StringConversion.h" />
 		<Unit filename="pmdb/libthoro/common/StringUtils.cpp" />
 		<Unit filename="pmdb/libthoro/common/StringUtils.h" />
 		<Extensions>
