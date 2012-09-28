@@ -59,7 +59,7 @@ void showGPLNotice()
 void showVersion()
 {
   showGPLNotice();
-  std::cout << "htmlify, version 0.03, 2012-09-28\n";
+  std::cout << "htmlify, version 0.03b, 2012-09-28\n";
 }
 
 void showHelp(const std::string& name)
@@ -226,8 +226,11 @@ int main(int argc, char **argv)
   //image tags
   CustomizedSimpleBBCode img_simple("img", "<img src=\"",
                                     doXHTML ? "\" alt=\"\" />" : "\" alt=\"\">");
-  //simple url tag
   MsgTemplate tpl;
+  tpl.loadFromString(doXHTML ? "<img src=\"{..inner..}\" alt=\"\" />"
+                             : "<img src=\"{..inner..}\" alt=\"\">");
+  SimpleTrimBBCode img_simple_trim("img", tpl, "inner", trimmablePrefix);
+  //simple url tag
   tpl.loadFromString("<a href=\"{..inner..}\" target=\"_blank\">{..inner..}</a>");
   SimpleTplAmpTransformBBCode url_simple("url", tpl, "inner");
   SimpleTrimBBCode url_simple_trim("url", tpl, "inner", trimmablePrefix);
@@ -254,14 +257,15 @@ int main(int argc, char **argv)
   parser.addCode(&center);
   parser.addCode(&left);
   parser.addCode(&right);
-  parser.addCode(&img_simple);
   if (trimmablePrefix.empty())
   {
+    parser.addCode(&img_simple);
     parser.addCode(&url_simple);
     parser.addCode(&url_advanced);
   }
   else
   {
+    parser.addCode(&img_simple_trim);
     parser.addCode(&url_simple_trim);
     parser.addCode(&url_advanced_trim);
   }
