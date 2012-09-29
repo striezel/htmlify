@@ -42,6 +42,7 @@
 		<Unit filename="pmdb/bbcode/BBCode.h" />
 		<Unit filename="pmdb/bbcode/BBCodeParser.cpp" />
 		<Unit filename="pmdb/bbcode/BBCodeParser.h" />
+		<Unit filename="pmdb/bbcode/TextProcessor.h" />
 		<Unit filename="pmdb/bbcode/quotes.cpp" />
 		<Unit filename="pmdb/bbcode/quotes.h" />
 		<Unit filename="pmdb/libthoro/common/FileFunctions.cpp" />

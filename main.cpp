@@ -59,7 +59,7 @@ void showGPLNotice()
 void showVersion()
 {
   showGPLNotice();
-  std::cout << "htmlify, version 0.03b, 2012-09-28\n";
+  std::cout << "htmlify, version 0.04, 2012-09-29\n";
 }
 
 void showHelp(const std::string& name)
@@ -80,7 +80,12 @@ void showHelp(const std::string& name)
             << "                     with --html.\n"
             << "  --trim=PREFIX    - removes PREFIX from link URLs, if they start with PREFIX.\n"
             << "  --utf8           - content of input files is encoded in UTF-8 and will be\n"
-            << "                     converted to ISO-8859-15 before processing.\n";
+            << "                     converted to ISO-8859-15 before processing.\n"
+            << "  --no-list        - do not parse [LIST] codes when creating (X)HTML files.\n"
+            << "  --br             - convert new line characters to line breaks in (X)HTML\n"
+            << "                     output. Disabled by default.\n"
+            << "  --no-space-trim  - do not reduce two or more consecutive spaces to one\n"
+            << "                     single space character.\n";
 }
 
 int main(int argc, char **argv)
@@ -90,6 +95,9 @@ int main(int argc, char **argv)
   bool htmlModeSpecified = false;
   std::string trimmablePrefix = "";
   bool isUTF8 = false;
+  bool noList = false;
+  bool nl2br = false;
+  bool spaceTrim = true;
 
   if ((argc>1) and (argv!=NULL))
   {
@@ -172,6 +180,33 @@ int main(int argc, char **argv)
           }
           isUTF8 = true;
         }//param == utf8
+        else if (param=="--no-list")
+        {
+          if (noList)
+          {
+            std::cout << "Parameter --no-list must not occur more than once!\n";
+            return rcInvalidParameter;
+          }
+          noList = true;
+        }//param == no-list
+        else if ((param=="--br") or (param=="--breaks"))
+        {
+          if (nl2br)
+          {
+            std::cout << "Parameter "<<param<<" must not occur more than once!\n";
+            return rcInvalidParameter;
+          }
+          nl2br = true;
+        }//param == br
+        else if ((param=="--no-space-trim") or (param=="--leave-spaces-alone"))
+        {
+          if (!spaceTrim)
+          {
+            std::cout << "Parameter "<<param<<" must not occur more than once!\n";
+            return rcInvalidParameter;
+          }
+          spaceTrim = false;
+        }//param == no-space-trim
         else if (FileExists(param))
         {
           if (pathTexts.find(param)!=pathTexts.end())
@@ -244,6 +279,8 @@ int main(int argc, char **argv)
   //size tags
   tpl.loadFromString("<font size=\"{..attr..}\">{..inner..}</font>");
   AdvancedTemplateBBCode size("size", tpl, "inner", "attr");
+  //tag for unordered lists
+  ListBBCode list_unordered("list", true);
 
   //add it to the parser
   BBCodeParser parser;
@@ -271,6 +308,14 @@ int main(int argc, char **argv)
   }
   parser.addCode(&color);
   parser.addCode(&size);
+  if (!noList) parser.addCode(&list_unordered);
+
+  KillSpacesBeforeNewline eatRedundantSpaces;
+  ListNewlinePreProcessor preProc_List;
+  ShortenDoubleSpaces preProc_Spaces;
+  parser.addPreProcessor(&eatRedundantSpaces);
+  if (nl2br and !noList) parser.addPreProcessor(&preProc_List);
+  if (spaceTrim) parser.addPreProcessor(&preProc_Spaces);
 
   std::set<std::string>::const_iterator iter = pathTexts.begin();
   while (iter!=pathTexts.end())
@@ -333,7 +378,7 @@ int main(int argc, char **argv)
     }//if UTF-8
 
     handleSpecialChars(content);
-    content = parser.parse(content, "", doXHTML, false);
+    content = parser.parse(content, "", doXHTML, nl2br);
 
     //save content
     std::ofstream output;
