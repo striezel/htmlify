@@ -27,6 +27,20 @@
 					<Add option="-s" />
 				</Linker>
 			</Target>
+			<Target title="Release_no-conv">
+				<Option output="bin/Release_no-conv/htmlify" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="bin/Release_no-conv/" />
+				<Option object_output="obj/Release_no-conv/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O3" />
+					<Add option="-DNO_STRING_CONVERSION" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
@@ -47,7 +61,10 @@
 		<Unit filename="pmdb/bbcode/quotes.h" />
 		<Unit filename="pmdb/libthoro/common/FileFunctions.cpp" />
 		<Unit filename="pmdb/libthoro/common/FileFunctions.h" />
-		<Unit filename="pmdb/libthoro/common/StringConversion.h" />
+		<Unit filename="pmdb/libthoro/common/StringConversion.h">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
 		<Unit filename="pmdb/libthoro/common/StringUtils.cpp" />
 		<Unit filename="pmdb/libthoro/common/StringUtils.h" />
 		<Extensions>

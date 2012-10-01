@@ -24,7 +24,9 @@
 #include <string>
 #include <cstring>
 #include "pmdb/libthoro/common/FileFunctions.h"
+#ifndef NO_STRING_CONVERSION
 #include "pmdb/libthoro/common/StringConversion.h"
+#endif
 #include "handleSpecialChars.h"
 #include "pmdb/MsgTemplate.h"
 #include "pmdb/bbcode/BBCode.h"
@@ -34,7 +36,9 @@
 //return codes
 const int rcInvalidParameter = 1;
 const int rcFileError        = 2;
+#ifndef NO_STRING_CONVERSION
 const int rcConversionFail   = 3;
+#endif
 
 void showGPLNotice()
 {
@@ -59,7 +63,11 @@ void showGPLNotice()
 void showVersion()
 {
   showGPLNotice();
+  #ifndef NO_STRING_CONVERSION
   std::cout << "htmlify, version 0.04, 2012-09-29\n";
+  #else
+  std::cout << "htmlify, version 0.04~no-conv, 2012-09-29\n";
+  #endif
 }
 
 void showHelp(const std::string& name)
@@ -79,8 +87,10 @@ void showHelp(const std::string& name)
             << "  --xhtml          - uses XHTML syntax for generated files. Mutually exclusive\n"
             << "                     with --html.\n"
             << "  --trim=PREFIX    - removes PREFIX from link URLs, if they start with PREFIX.\n"
+            #ifndef NO_STRING_CONVERSION
             << "  --utf8           - content of input files is encoded in UTF-8 and will be\n"
             << "                     converted to ISO-8859-15 before processing.\n"
+            #endif
             << "  --no-list        - do not parse [LIST] codes when creating (X)HTML files.\n"
             << "  --br             - convert new line characters to line breaks in (X)HTML\n"
             << "                     output. Disabled by default.\n"
@@ -94,7 +104,9 @@ int main(int argc, char **argv)
   bool doXHTML = false;
   bool htmlModeSpecified = false;
   std::string trimmablePrefix = "";
+  #ifndef NO_STRING_CONVERSION
   bool isUTF8 = false;
+  #endif
   bool noList = false;
   bool nl2br = false;
   bool spaceTrim = true;
@@ -173,12 +185,17 @@ int main(int argc, char **argv)
         }//param == trim (single parameter version)
         else if ((param=="--utf8") or (param=="--UTF-8"))
         {
+          #ifndef NO_STRING_CONVERSION
           if (isUTF8)
           {
             std::cout << "Parameter "<<param<<" must not occur more than once!\n";
             return rcInvalidParameter;
           }
           isUTF8 = true;
+          #else
+          std::cout << "Parameter "<<param<<" is not available in the no-conv build of htmlify!\n";
+          return rcInvalidParameter;
+          #endif
         }//param == utf8
         else if (param=="--no-list")
         {
@@ -365,6 +382,7 @@ int main(int argc, char **argv)
     delete[] buffer;
     buffer = NULL;
 
+    #ifndef NO_STRING_CONVERSION
     if (isUTF8)
     {
       //convert content to iso-8859-15
@@ -376,6 +394,7 @@ int main(int argc, char **argv)
       }
       content = iso_content;
     }//if UTF-8
+    #endif
 
     handleSpecialChars(content);
     content = parser.parse(content, "", doXHTML, nl2br);
