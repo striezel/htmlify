@@ -13,6 +13,7 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-g" />
+					<Add option="-DDEBUG" />
 				</Compiler>
 			</Target>
 			<Target title="Release">
@@ -49,6 +50,7 @@
 		</Compiler>
 		<Unit filename="TrimmingBBCodes.h" />
 		<Unit filename="handleSpecialChars.h" />
+		<Unit filename="htmlifyPostProcessors.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="pmdb/MsgTemplate.cpp" />
 		<Unit filename="pmdb/MsgTemplate.h" />
@@ -56,6 +58,9 @@
 		<Unit filename="pmdb/bbcode/BBCode.h" />
 		<Unit filename="pmdb/bbcode/BBCodeParser.cpp" />
 		<Unit filename="pmdb/bbcode/BBCodeParser.h" />
+		<Unit filename="pmdb/bbcode/BBCode_Table.cpp" />
+		<Unit filename="pmdb/bbcode/BBCode_Table.h" />
+		<Unit filename="pmdb/bbcode/DefaultCodes.h" />
 		<Unit filename="pmdb/bbcode/TextProcessor.h" />
 		<Unit filename="pmdb/bbcode/quotes.cpp" />
 		<Unit filename="pmdb/bbcode/quotes.h" />

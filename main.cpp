@@ -30,8 +30,11 @@
 #include "handleSpecialChars.h"
 #include "pmdb/MsgTemplate.h"
 #include "pmdb/bbcode/BBCode.h"
+#include "pmdb/bbcode/BBCode_Table.h"
 #include "pmdb/bbcode/BBCodeParser.h"
+#include "pmdb/bbcode/DefaultCodes.h"
 #include "TrimmingBBCodes.h"
+#include "htmlifyPostProcessors.h"
 
 //return codes
 const int rcInvalidParameter = 1;
@@ -64,9 +67,9 @@ void showVersion()
 {
   showGPLNotice();
   #ifndef NO_STRING_CONVERSION
-  std::cout << "htmlify, version 0.04, 2012-09-29\n";
+  std::cout << "htmlify, version 0.05, 2012-10-12\n";
   #else
-  std::cout << "htmlify, version 0.04~no-conv, 2012-09-29\n";
+  std::cout << "htmlify, version 0.05~no-conv, 2012-10-12\n";
   #endif
 }
 
@@ -95,7 +98,15 @@ void showHelp(const std::string& name)
             << "  --br             - convert new line characters to line breaks in (X)HTML\n"
             << "                     output. Disabled by default.\n"
             << "  --no-space-trim  - do not reduce two or more consecutive spaces to one\n"
-            << "                     single space character.\n";
+            << "                     single space character.\n"
+            << "  --table=CLASS    - sets the class for grids in <table> to CLASS.\n"
+            << "  --row=CLASS      - sets the class for grids in <tr> to CLASS.\n"
+            << "  --cell=CLASS     - sets the class for grids in <td> to CLASS.\n"
+            << "  --std-classes    - sets the 'standard' classes for the three class options.\n"
+            << "                     This is equivalent to specifying all these parameters:\n"
+            << "                         --table="<<TableBBCode::DefaultTableClass<<"\n"
+            << "                         --row="<<TableBBCode::DefaultRowClass<<"\n"
+            << "                         --cell="<<TableBBCode::DefaultCellClass<<"\n";
 }
 
 int main(int argc, char **argv)
@@ -110,6 +121,9 @@ int main(int argc, char **argv)
   bool noList = false;
   bool nl2br = false;
   bool spaceTrim = true;
+  std::string classTable;
+  std::string classRow;
+  std::string classCell;
 
   if ((argc>1) and (argv!=NULL))
   {
@@ -224,6 +238,24 @@ int main(int argc, char **argv)
           }
           spaceTrim = false;
         }//param == no-space-trim
+        else if ((param.substr(0,8)=="--table=") and (param.length()>8))
+        {
+          classTable = param.substr(8);
+        }//param == 'table=...'
+        else if ((param.substr(0,6)=="--row=") and (param.length()>6))
+        {
+          classRow = param.substr(6);
+        }//param == 'row=...'
+        else if ((param.substr(0,7)=="--cell=") and (param.length()>7))
+        {
+          classCell = param.substr(7);
+        }//param == 'cell=...'
+        else if ((param=="--std-classes") or (param=="--classes") or (param=="--default-classes"))
+        {
+          classTable = TableBBCode::DefaultTableClass;
+          classRow   = TableBBCode::DefaultRowClass;
+          classCell  = TableBBCode::DefaultCellClass;
+        }//param == std-classes
         else if (FileExists(param))
         {
           if (pathTexts.find(param)!=pathTexts.end())
@@ -258,23 +290,11 @@ int main(int argc, char **argv)
     return rcInvalidParameter;
   }
 
+  if (classTable.empty()) classTable = TableBBCode::DefaultTableClass;
+  if (classRow.empty())   classRow   = TableBBCode::DefaultRowClass;
+  if (classCell.empty())  classCell  = TableBBCode::DefaultCellClass;
+
   //prepare BB codes
-  // [b], [u], [i], [s] codes
-  SimpleBBCode b("b");
-  SimpleBBCode u("u");
-  SimpleBBCode i("i");
-  CustomizedSimpleBBCode s("s",
-                           "<span style=\"text-decoration:line-through;\">",
-                           "</span>");
-  //[sup] and [sub] tags
-  SimpleBBCode sup("sup");
-  SimpleBBCode sub("sub");
-  //indent tags
-  CustomizedSimpleBBCode indent("indent", "<blockquote>", "</blockquote>");
-  //alignment stuff
-  SimpleBBCode center("center");
-  CustomizedSimpleBBCode left("left", "<div align=\"left\">", "</div>");
-  CustomizedSimpleBBCode right("right", "<div align=\"right\">", "</div>");
   //image tags
   CustomizedSimpleBBCode img_simple("img", "<img src=\"",
                                     doXHTML ? "\" alt=\"\" />" : "\" alt=\"\">");
@@ -284,38 +304,32 @@ int main(int argc, char **argv)
   SimpleTrimBBCode img_simple_trim("img", tpl, "inner", trimmablePrefix);
   //simple url tag
   tpl.loadFromString("<a href=\"{..inner..}\" target=\"_blank\">{..inner..}</a>");
-  SimpleTplAmpTransformBBCode url_simple("url", tpl, "inner");
   SimpleTrimBBCode url_simple_trim("url", tpl, "inner", trimmablePrefix);
   //advanced url tag
   tpl.loadFromString("<a href=\"{..attribute..}\" target=\"_blank\">{..inner..}</a>");
-  AdvancedTplAmpTransformBBCode url_advanced("url", tpl, "inner", "attribute");
   AdvancedTrimBBCode url_advanced_trim("url", tpl, "inner", "attribute", trimmablePrefix);
-  //color tags
-  tpl.loadFromString("<font color=\"{..attr..}\">{..inner..}</font>");
-  AdvancedTemplateBBCode color("color", tpl, "inner", "attr");
-  //size tags
-  tpl.loadFromString("<font size=\"{..attr..}\">{..inner..}</font>");
-  AdvancedTemplateBBCode size("size", tpl, "inner", "attr");
   //tag for unordered lists
   ListBBCode list_unordered("list", true);
+  //tables
+  TableBBCode table("table", true, classTable, classRow, classCell);
 
   //add it to the parser
   BBCodeParser parser;
-  parser.addCode(&b);
-  parser.addCode(&u);
-  parser.addCode(&i);
-  parser.addCode(&s);
-  parser.addCode(&sup);
-  parser.addCode(&sub);
-  parser.addCode(&indent);
-  parser.addCode(&center);
-  parser.addCode(&left);
-  parser.addCode(&right);
+  parser.addCode(&bbcode_default::b);
+  parser.addCode(&bbcode_default::u);
+  parser.addCode(&bbcode_default::i);
+  parser.addCode(&bbcode_default::s);
+  parser.addCode(&bbcode_default::sup);
+  parser.addCode(&bbcode_default::sub);
+  parser.addCode(&bbcode_default::indent);
+  parser.addCode(&bbcode_default::center);
+  parser.addCode(&bbcode_default::left);
+  parser.addCode(&bbcode_default::right);
   if (trimmablePrefix.empty())
   {
     parser.addCode(&img_simple);
-    parser.addCode(&url_simple);
-    parser.addCode(&url_advanced);
+    parser.addCode(&bbcode_default::url_simple);
+    parser.addCode(&bbcode_default::url_advanced);
   }
   else
   {
@@ -323,16 +337,25 @@ int main(int argc, char **argv)
     parser.addCode(&url_simple_trim);
     parser.addCode(&url_advanced_trim);
   }
-  parser.addCode(&color);
-  parser.addCode(&size);
+  parser.addCode(&bbcode_default::color);
+  parser.addCode(&bbcode_default::size);
+  parser.addCode(&bbcode_default::font);
   if (!noList) parser.addCode(&list_unordered);
+  parser.addCode(&table);
 
   KillSpacesBeforeNewline eatRedundantSpaces;
   ListNewlinePreProcessor preProc_List;
   ShortenDoubleSpaces preProc_Spaces;
+  TablePreprocessor table_killLF("tr", "td");
+  TablePostProcessor table_indent;
+  TDR_PostProcessor tdr_post;
+
   parser.addPreProcessor(&eatRedundantSpaces);
   if (nl2br and !noList) parser.addPreProcessor(&preProc_List);
   if (spaceTrim) parser.addPreProcessor(&preProc_Spaces);
+  if (nl2br) parser.addPreProcessor(&table_killLF);
+  parser.addPostProcessor(&table_indent);
+  parser.addPostProcessor(&tdr_post);
 
   std::set<std::string>::const_iterator iter = pathTexts.begin();
   while (iter!=pathTexts.end())
