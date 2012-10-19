@@ -67,9 +67,9 @@ void showVersion()
 {
   showGPLNotice();
   #ifndef NO_STRING_CONVERSION
-  std::cout << "htmlify, version 0.05, 2012-10-12\n";
+  std::cout << "htmlify, version 0.06, 2012-10-19\n";
   #else
-  std::cout << "htmlify, version 0.05~no-conv, 2012-10-12\n";
+  std::cout << "htmlify, version 0.06~no-conv, 2012-10-19\n";
   #endif
 }
 
@@ -92,7 +92,7 @@ void showHelp(const std::string& name)
             << "  --trim=PREFIX    - removes PREFIX from link URLs, if they start with PREFIX.\n"
             #ifndef NO_STRING_CONVERSION
             << "  --utf8           - content of input files is encoded in UTF-8 and will be\n"
-            << "                     converted to ISO-8859-15 before processing.\n"
+            << "                     converted to ISO-8859-1 before processing.\n"
             #endif
             << "  --no-list        - do not parse [LIST] codes when creating (X)HTML files.\n"
             << "  --br             - convert new line characters to line breaks in (X)HTML\n"
@@ -312,6 +312,8 @@ int main(int argc, char **argv)
   ListBBCode list_unordered("list", true);
   //tables
   TableBBCode table("table", true, classTable, classRow, classCell);
+  //hr code
+  HorizontalRuleBBCode hr("hr", doXHTML);
 
   //add it to the parser
   BBCodeParser parser;
@@ -342,6 +344,7 @@ int main(int argc, char **argv)
   parser.addCode(&bbcode_default::font);
   if (!noList) parser.addCode(&list_unordered);
   parser.addCode(&table);
+  parser.addCode(&hr);
 
   KillSpacesBeforeNewline eatRedundantSpaces;
   ListNewlinePreProcessor preProc_List;
@@ -408,9 +411,9 @@ int main(int argc, char **argv)
     #ifndef NO_STRING_CONVERSION
     if (isUTF8)
     {
-      //convert content to iso-8859-15
+      //convert content to iso-8859-1
       std::string iso_content;
-      if (!Thoro::utf8_to_iso8859_15(content, iso_content))
+      if (!Thoro::utf8_to_iso8859_1(content, iso_content))
       {
         std::cout << "Error: Conversion from UTF-8 failed!\n";
         return rcConversionFail;
