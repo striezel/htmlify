@@ -67,9 +67,9 @@ void showVersion()
 {
   showGPLNotice();
   #ifndef NO_STRING_CONVERSION
-  std::cout << "htmlify, version 0.06, 2012-10-19\n";
+  std::cout << "htmlify, version 0.06b, 2012-10-31\n";
   #else
-  std::cout << "htmlify, version 0.06~no-conv, 2012-10-19\n";
+  std::cout << "htmlify, version 0.06b~no-conv, 2012-10-31\n";
   #endif
 }
 
@@ -346,6 +346,7 @@ int main(int argc, char **argv)
   parser.addCode(&table);
   parser.addCode(&hr);
 
+  NormalisingPreProcessor normaliser;
   KillSpacesBeforeNewline eatRedundantSpaces;
   ListNewlinePreProcessor preProc_List;
   ShortenDoubleSpaces preProc_Spaces;
@@ -353,6 +354,7 @@ int main(int argc, char **argv)
   TablePostProcessor table_indent;
   TDR_PostProcessor tdr_post;
 
+  if (nl2br) parser.addPreProcessor(&normaliser);
   parser.addPreProcessor(&eatRedundantSpaces);
   if (nl2br and !noList) parser.addPreProcessor(&preProc_List);
   if (spaceTrim) parser.addPreProcessor(&preProc_Spaces);

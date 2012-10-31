@@ -23,6 +23,29 @@
 
 #include "pmdb/bbcode/TextProcessor.h"
 
+/* struct NormalisingPreProcessor:
+      "normalises" line breaks by replacing \r\n (Windows style) by \n (Unix style)
+*/
+struct NormalisingPreProcessor: public TextProcessor
+{
+  public:
+    /* processes the given text, i.e. performs transformations
+
+       parameters:
+           text - the message text that should be processed
+    */
+    virtual void applyToText(std::string& text) const
+    {
+      std::string needle = "\r\n";
+      std::string::size_type pos = text.find(needle);
+      while (pos!=std::string::npos)
+      {
+        text.replace(pos, needle.length(), "\n");
+        pos = text.find(needle, pos);
+      }//while
+    }
+};//struct
+
 /* struct TablePostProcessor:
       adds my usual indentation to table codes
 */
