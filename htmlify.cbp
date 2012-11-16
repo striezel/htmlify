@@ -61,6 +61,7 @@
 		<Unit filename="pmdb/bbcode/BBCode_Table.cpp" />
 		<Unit filename="pmdb/bbcode/BBCode_Table.h" />
 		<Unit filename="pmdb/bbcode/DefaultCodes.h" />
+		<Unit filename="pmdb/bbcode/Notifier.h" />
 		<Unit filename="pmdb/bbcode/TextProcessor.h" />
 		<Unit filename="pmdb/bbcode/quotes.cpp" />
 		<Unit filename="pmdb/bbcode/quotes.h" />

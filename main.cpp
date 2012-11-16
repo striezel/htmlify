@@ -67,9 +67,9 @@ void showVersion()
 {
   showGPLNotice();
   #ifndef NO_STRING_CONVERSION
-  std::cout << "htmlify, version 0.06b, 2012-10-31\n";
+  std::cout << "htmlify, version 0.07, 2012-11-16\n";
   #else
-  std::cout << "htmlify, version 0.06b~no-conv, 2012-10-31\n";
+  std::cout << "htmlify, version 0.07~no-conv, 2012-11-16\n";
   #endif
 }
 
@@ -106,7 +106,13 @@ void showHelp(const std::string& name)
             << "                     This is equivalent to specifying all these parameters:\n"
             << "                         --table="<<TableBBCode::DefaultTableClass<<"\n"
             << "                         --row="<<TableBBCode::DefaultRowClass<<"\n"
-            << "                         --cell="<<TableBBCode::DefaultCellClass<<"\n";
+            << "                         --cell="<<TableBBCode::DefaultCellClass<<"\n"
+            << "  --max-table-width=WIDTH\n"
+            << "                   - sets the maximum width that is allowed for tables to\n"
+            << "                     WIDTH pixels. Larger values will be discarded. Zero will\n"
+            << "                     be interpreted as 'no limit'. The default value is 600.\n"
+            << "  --no-table-limit - no default max. table width will be set by the programme.\n"
+            << "                     Mutually exclusive with --max-table-width=WIDTH.\n";
 }
 
 int main(int argc, char **argv)
@@ -124,6 +130,8 @@ int main(int argc, char **argv)
   std::string classTable;
   std::string classRow;
   std::string classCell;
+  unsigned int tableLimit = 0;
+  bool hasSetTableLimit = false;
 
   if ((argc>1) and (argv!=NULL))
   {
@@ -256,6 +264,62 @@ int main(int argc, char **argv)
           classRow   = TableBBCode::DefaultRowClass;
           classCell  = TableBBCode::DefaultCellClass;
         }//param == std-classes
+        else if ((param=="--width-limit") or (param=="--max-table-width"))
+        {
+          if ((i+1<argc) and (argv[i+1]!=NULL))
+          {
+            if (hasSetTableLimit)
+            {
+              std::cout << "Parameter "<<param<<" must not occur more than once!\n";
+              return rcInvalidParameter;
+            }
+            unsigned int arg_val;
+            if (!stringToUnsignedInt(std::string(argv[i+1]), arg_val))
+            {
+              std::cout << "Error: \""<<std::string(argv[i+1])<<"\" is not a valid, positive integer!\n";
+              return rcInvalidParameter;
+            }
+            tableLimit = arg_val;
+            hasSetTableLimit = true;
+            ++i; //skip next parameter, because it's used as limit already
+            std::cout << "Table width limit was set to \""<<tableLimit<<"\".\n";
+          }
+          else
+          {
+            std::cout << "Error: You have to specify an integer value after \""
+                      << param <<"\".\n";
+            return rcInvalidParameter;
+          }
+        }//param == max-table-width
+        else if ((param.substr(0,18)=="--max-table-width=") and (param.length()>18))
+        {
+          if (hasSetTableLimit)
+          {
+            std::cout << "Parameter --max-table-width must not occur more than once!\n";
+            return rcInvalidParameter;
+          }
+          unsigned int width_val;
+          if (!stringToUnsignedInt(param.substr(18), width_val))
+          {
+            std::cout << "Error: \""<<param.substr(18)<<"\" is not a valid, positive integer!\n";
+            return rcInvalidParameter;
+          }
+          tableLimit = width_val;
+          hasSetTableLimit = true;
+          std::cout << "Table width limit was set to \""<<tableLimit<<"\".\n";
+        }//param == max-table-width (single parameter version)
+        else if (param=="--no-table-limit")
+        {
+          if (hasSetTableLimit)
+          {
+            std::cout << "Parameter "<<param<<" must not occur more than once "
+                      << "and is mutually exclusive with --max-table width!\n";
+            return rcInvalidParameter;
+          }
+          tableLimit = 0;
+          hasSetTableLimit = true;
+          std::cout << "No table limit will be set.\n";
+        }//param == no-table-limit
         else if (FileExists(param))
         {
           if (pathTexts.find(param)!=pathTexts.end())
@@ -294,6 +358,13 @@ int main(int argc, char **argv)
   if (classRow.empty())   classRow   = TableBBCode::DefaultRowClass;
   if (classCell.empty())  classCell  = TableBBCode::DefaultCellClass;
 
+  if (!hasSetTableLimit)
+  {
+    //set default value, if nothing has been set yet
+    tableLimit = 600;
+    std::cout << "Info: Table width limit was set to "<<tableLimit<<" by default.\n";
+  }
+
   //prepare BB codes
   //image tags
   CustomizedSimpleBBCode img_simple("img", "<img src=\"",
@@ -311,7 +382,7 @@ int main(int argc, char **argv)
   //tag for unordered lists
   ListBBCode list_unordered("list", true);
   //tables
-  TableBBCode table("table", true, classTable, classRow, classCell);
+  TableBBCode table("table", true, classTable, classRow, classCell, tableLimit);
   //hr code
   HorizontalRuleBBCode hr("hr", doXHTML);
 
