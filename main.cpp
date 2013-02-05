@@ -46,7 +46,7 @@ const int rcConversionFail   = 3;
 void showGPLNotice()
 {
   std::cout << "htmlify\n"
-            << "  Copyright (C) 2012 Thoronador\n"
+            << "  Copyright (C) 2012, 2013 Thoronador\n"
             << "\n"
             << "  This programme is free software: you can redistribute it and/or\n"
             << "  modify it under the terms of the GNU General Public License as published\n"
@@ -67,9 +67,9 @@ void showVersion()
 {
   showGPLNotice();
   #ifndef NO_STRING_CONVERSION
-  std::cout << "htmlify, version 0.07, 2012-11-16\n";
+  std::cout << "htmlify, version 0.08, 2013-02-05\n";
   #else
-  std::cout << "htmlify, version 0.07~no-conv, 2012-11-16\n";
+  std::cout << "htmlify, version 0.08~no-conv, 2013-02-05\n";
   #endif
 }
 

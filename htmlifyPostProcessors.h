@@ -82,6 +82,38 @@ struct TablePostProcessor: public TextProcessor
         text.replace(pos, needle.length(), "\n    <td class=\"grid_td\">");
         pos = text.find(needle, pos+12);
       }//while
+
+      needle = "><tr";
+      pos = text.find(needle);
+      while (pos!=std::string::npos)
+      {
+        text.replace(pos, needle.length(), ">\n  <tr");
+        pos = text.find(needle, pos+6);
+      }//while
+
+      needle = "><td";
+      pos = text.find(needle);
+      while (pos!=std::string::npos)
+      {
+        text.replace(pos, needle.length(), ">\n    <td");
+        pos = text.find(needle, pos+9);
+      }//while
+
+      needle = "></tr>";
+      pos = text.find(needle);
+      while (pos!=std::string::npos)
+      {
+        text.replace(pos, needle.length(), ">\n  </tr>");
+        pos = text.find(needle, pos+9);
+      }//while
+
+      needle = "></table>";
+      pos = text.find(needle);
+      while (pos!=std::string::npos)
+      {
+        text.replace(pos, needle.length(), ">\n</table>");
+        pos = text.find(needle, pos+10);
+      }//while
     }
 };//struct
 
