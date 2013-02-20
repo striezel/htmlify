@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of htmlify.
-    Copyright (C) 2012  Thoronador
+    Copyright (C) 2012, 2013  Thoronador
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -67,9 +67,9 @@ void showVersion()
 {
   showGPLNotice();
   #ifndef NO_STRING_CONVERSION
-  std::cout << "htmlify, version 0.08, 2013-02-05\n";
+  std::cout << "htmlify, version 0.08b, 2013-02-20\n";
   #else
-  std::cout << "htmlify, version 0.08~no-conv, 2013-02-05\n";
+  std::cout << "htmlify, version 0.08b~no-conv, 2013-02-20\n";
   #endif
 }
 
