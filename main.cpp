@@ -67,9 +67,9 @@ void showVersion()
 {
   showGPLNotice();
   #ifndef NO_STRING_CONVERSION
-  std::cout << "htmlify, version 0.08b, 2013-02-20\n";
+  std::cout << "htmlify, version 0.08c, 2013-03-31\n";
   #else
-  std::cout << "htmlify, version 0.08b~no-conv, 2013-02-20\n";
+  std::cout << "htmlify, version 0.08c~no-conv, 2013-03-31\n";
   #endif
 }
 
@@ -97,6 +97,8 @@ void showHelp(const std::string& name)
             << "  --no-list        - do not parse [LIST] codes when creating (X)HTML files.\n"
             << "  --br             - convert new line characters to line breaks in (X)HTML\n"
             << "                     output. Disabled by default.\n"
+            << "  --no--br         - do not convert new line characters to line breaks in\n"
+            << "                     (X)HTML output.\n"
             << "  --no-space-trim  - do not reduce two or more consecutive spaces to one\n"
             << "                     single space character.\n"
             << "  --table=CLASS    - sets the class for grids in <table> to CLASS.\n"
@@ -125,6 +127,7 @@ int main(int argc, char **argv)
   bool isUTF8 = false;
   #endif
   bool noList = false;
+  bool hasSet_nl2br = false;
   bool nl2br = false;
   bool spaceTrim = true;
   std::string classTable;
@@ -230,12 +233,23 @@ int main(int argc, char **argv)
         }//param == no-list
         else if ((param=="--br") or (param=="--breaks"))
         {
-          if (nl2br)
+          if (hasSet_nl2br)
           {
             std::cout << "Parameter "<<param<<" must not occur more than once!\n";
             return rcInvalidParameter;
           }
           nl2br = true;
+          hasSet_nl2br = true;
+        }//param == br
+        else if ((param=="--no-br") or (param=="--no-breaks"))
+        {
+          if (hasSet_nl2br)
+          {
+            std::cout << "Parameter "<<param<<" must not occur more than once and is mutually exclusive with --br!\n";
+            return rcInvalidParameter;
+          }
+          nl2br = false;
+          hasSet_nl2br = true;
         }//param == br
         else if ((param=="--no-space-trim") or (param=="--leave-spaces-alone"))
         {
@@ -367,12 +381,16 @@ int main(int argc, char **argv)
 
   //prepare BB codes
   //image tags
-  CustomizedSimpleBBCode img_simple("img", "<img src=\"",
-                                    doXHTML ? "\" alt=\"\" />" : "\" alt=\"\">");
   MsgTemplate tpl;
   tpl.loadFromString(doXHTML ? "<img src=\"{..inner..}\" alt=\"\" />"
                              : "<img src=\"{..inner..}\" alt=\"\">");
+  SimpleTplAmpTransformBBCode img_simple("img", tpl, "inner");
   SimpleTrimBBCode img_simple_trim("img", tpl, "inner", trimmablePrefix);
+  //advanced image tag
+  tpl.loadFromString(doXHTML ? "<img src=\"{..inner..}\" align=\"{..attribute..}\" alt=\"\" />"
+                             : "<img src=\"{..inner..}\" align=\"{..attribute..}\" alt=\"\">");
+  AdvancedTplAmpTransformBBCode img_advanced("img", tpl, "inner", "attribute");
+  AdvancedTrimBBCode img_advanced_trim("img", tpl, "inner", "attribute", trimmablePrefix);
   //simple url tag
   tpl.loadFromString("<a href=\"{..inner..}\" target=\"_blank\">{..inner..}</a>");
   SimpleTrimBBCode url_simple_trim("url", tpl, "inner", trimmablePrefix);
@@ -401,12 +419,14 @@ int main(int argc, char **argv)
   if (trimmablePrefix.empty())
   {
     parser.addCode(&img_simple);
+    parser.addCode(&img_advanced);
     parser.addCode(&bbcode_default::url_simple);
     parser.addCode(&bbcode_default::url_advanced);
   }
   else
   {
     parser.addCode(&img_simple_trim);
+    parser.addCode(&img_advanced_trim);
     parser.addCode(&url_simple_trim);
     parser.addCode(&url_advanced_trim);
   }
