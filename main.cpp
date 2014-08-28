@@ -28,11 +28,11 @@
 #include "pmdb/libthoro/common/StringConversion.h"
 #endif
 #include "handleSpecialChars.h"
-#include "pmdb/MsgTemplate.h"
-#include "pmdb/bbcode/BBCode.h"
-#include "pmdb/bbcode/BBCode_Table.h"
-#include "pmdb/bbcode/BBCodeParser.h"
-#include "pmdb/bbcode/DefaultCodes.h"
+#include "pmdb/MsgTemplate.hpp"
+#include "pmdb/bbcode/BBCode.hpp"
+#include "pmdb/bbcode/BBCode_Table.hpp"
+#include "pmdb/bbcode/BBCodeParser.hpp"
+#include "pmdb/bbcode/DefaultCodes.hpp"
 #include "TrimmingBBCodes.h"
 #include "htmlifyPostProcessors.h"
 
