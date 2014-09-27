@@ -7,10 +7,22 @@ sudo: false
 before_install:
   - git submodule update --init --recursive
 script:
-  - ./pmdb/ci/cpplint.sh
-  - mkdir ./build
-  - cd ./build
-  - cmake ..
-  - make -j2
+  - echo "coverity stuff should be done by now."
 notifications:
   email: false
+
+env:
+  global:
+   # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
+   #   via the "travis encrypt" command using the project repo's public key
+   - secure: "IvAi7wt+KlGmskSluRtXJO1PTLoaTt3CPqsUO4M07sJW4lneKqwfUUnrGveCqQDAAxFdONFdSOCRLha7B6YUrlO8TkZWbPuXuIviF0EQdQqC8IS31hq4Ffbh4kIuYUOJh5HJH1eJvHIHnKcaooFaE/KYsMUUaUPrRSgb1dFvgaU="
+
+addons:
+  coverity_scan:
+    project:
+      name: "Thoronador/htmlify"
+      description: "htmlify"
+    notification_email: thoronador@users.sourceforge.net
+    build_command_prepend: "cmake ./"
+    build_command:   "make"
+    branch_pattern: coverity_scan
