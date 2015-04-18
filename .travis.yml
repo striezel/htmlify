@@ -2,16 +2,14 @@ language: cpp
 compiler:
   - clang
   - gcc
-branches:
-  only:
-    - master
-    - travis
+# send to container-based infrastructure -> faster
+sudo: false
 before_install:
   - git submodule update --init --recursive
 script:
   - mkdir ./build
   - cd ./build
   - cmake ..
-  - make
+  - make -j2
 notifications:
   email: false
