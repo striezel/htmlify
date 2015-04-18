@@ -21,7 +21,7 @@
 #ifndef TRIMMINGBBCODES_H
 #define TRIMMINGBBCODES_H
 
-#include "pmdb/bbcode/BBCode.hpp"
+#include "pmdb/code/bbcode/BBCode.hpp"
 
 std::string trimPrefix(std::string text, const std::string& prefix)
 {

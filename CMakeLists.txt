@@ -6,14 +6,19 @@ project(htmlify)
 add_definitions(-DNO_SMILIES_IN_PARSER)
 
 set(htmlify_sources
-    main.cpp
-    pmdb/MsgTemplate.cpp
-    pmdb/bbcode/BBCode.cpp
-    pmdb/bbcode/BBCodeParser.cpp
-    pmdb/bbcode/BBCode_Table.cpp
-    pmdb/bbcode/quotes.cpp
-    pmdb/libthoro/common/FileFunctions.cpp
+    pmdb/code/MsgTemplate.cpp
+    pmdb/code/bbcode/AdvancedTemplateBBCode.cpp
+    pmdb/code/bbcode/BBCodeParser.cpp
+    pmdb/code/bbcode/CustomizedSimpleBBCode.cpp
+    pmdb/code/bbcode/HorizontalRuleBBCode.cpp
+    pmdb/code/bbcode/ListBBCode.cpp
+    pmdb/code/bbcode/SimpleBBCode.cpp
+    pmdb/code/bbcode/SimpleTemplateBBCode.cpp
+    pmdb/code/bbcode/TableBBCode.cpp
+    pmdb/code/bbcode/quotes.cpp
     pmdb/libthoro/common/StringUtils.cpp
+    pmdb/libthoro/encoding/StringConversion.cpp
+    pmdb/libthoro/filesystem/FileFunctions.cpp
     main.cpp)
 
 if (CMAKE_COMPILER_IS_GNUCC)

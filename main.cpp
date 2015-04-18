@@ -23,16 +23,18 @@
 #include <set>
 #include <string>
 #include <cstring>
-#include "pmdb/libthoro/common/FileFunctions.h"
+#include "pmdb/libthoro/filesystem/FileFunctions.hpp"
 #ifndef NO_STRING_CONVERSION
-#include "pmdb/libthoro/common/StringConversion.h"
+#include "pmdb/libthoro/encoding/StringConversion.hpp"
 #endif
 #include "handleSpecialChars.h"
-#include "pmdb/MsgTemplate.hpp"
-#include "pmdb/bbcode/BBCode.hpp"
-#include "pmdb/bbcode/BBCode_Table.hpp"
-#include "pmdb/bbcode/BBCodeParser.hpp"
-#include "pmdb/bbcode/DefaultCodes.hpp"
+#include "pmdb/code/MsgTemplate.hpp"
+#include "pmdb/code/bbcode/BBCode.hpp"
+#include "pmdb/code/bbcode/BBCodeParser.hpp"
+#include "pmdb/code/bbcode/DefaultCodes.hpp"
+#include "pmdb/code/bbcode/HorizontalRuleBBCode.hpp"
+#include "pmdb/code/bbcode/ListBBCode.hpp"
+#include "pmdb/code/bbcode/TableBBCode.hpp"
 #include "TrimmingBBCodes.h"
 #include "htmlifyPostProcessors.h"
 
@@ -334,7 +336,7 @@ int main(int argc, char **argv)
           hasSetTableLimit = true;
           std::cout << "No table limit will be set.\n";
         }//param == no-table-limit
-        else if (FileExists(param))
+        else if (libthoro::filesystem::File::exists(param))
         {
           if (pathTexts.find(param)!=pathTexts.end())
           {
@@ -506,7 +508,7 @@ int main(int argc, char **argv)
     {
       //convert content to iso-8859-1
       std::string iso_content;
-      if (!Thoro::utf8_to_iso8859_1(content, iso_content))
+      if (!libthoro::encoding::utf8_to_iso8859_1(content, iso_content))
       {
         std::cout << "Error: Conversion from UTF-8 failed!\n";
         return rcConversionFail;

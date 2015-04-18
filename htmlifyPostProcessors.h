@@ -21,7 +21,7 @@
 #ifndef HTMLIFYPOSTPROCESSORS_H
 #define HTMLIFYPOSTPROCESSORS_H
 
-#include "pmdb/bbcode/TextProcessor.hpp"
+#include "pmdb/code/bbcode/TextProcessor.hpp"
 
 /* struct NormalisingPreProcessor:
       "normalises" line breaks by replacing \r\n (Windows style) by \n (Unix style)
