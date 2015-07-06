@@ -20,11 +20,11 @@ system to get the latest source code directly from the Git repository.
 
 All three can usually be installed be typing
 
-  apt-get install cmake g++ git
+    apt-get install cmake g++ git
 
 or
 
-  yum install cmake gcc-c++ git
+    yum install cmake gcc-c++ git
 
 into a root terminal.
 
@@ -33,18 +33,18 @@ into a root terminal.
 Get the source directly from Git by cloning the Git repository and change to
 the directory after the repository is completely cloned:
 
-  git clone https://github.com/Thoronador/htmlify.git ./htmlify
-  cd htmlify
+    git clone https://github.com/Thoronador/htmlify.git ./htmlify
+    cd htmlify
 
 ## Build process
 
 The build process is relatively easy, because CMake does all the preparations.
 Starting in the root directory of the source, you can do the following steps:
 
-  mkdir build
-  cd build
-  cmake ../
-  make -j2
+    mkdir build
+    cd build
+    cmake ../
+    make -j2
 
 Now the htmlify binary is built and ready for use.
 
