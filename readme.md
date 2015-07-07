@@ -6,10 +6,6 @@ snippets.
 The text is read from one or more input file(s), which have to be specified as
 command-line arguments to the program.
 
-# Documentation
-
-There is no documentation yet - apart from this readme file.
-
 # Building htmlify from source
 
 ## Prerequisites
@@ -35,6 +31,10 @@ the directory after the repository is completely cloned:
 
     git clone https://github.com/Thoronador/htmlify.git ./htmlify
     cd htmlify
+    git submodule update --init --recursive
+
+The last of the lines above initializes and updates the submodules that the
+htmlify source code needs, too, to be build from source.
 
 ## Build process
 
