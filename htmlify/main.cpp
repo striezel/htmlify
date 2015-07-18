@@ -23,20 +23,20 @@
 #include <set>
 #include <string>
 #include <cstring>
-#include "pmdb/libthoro/filesystem/FileFunctions.hpp"
+#include "../pmdb/libthoro/filesystem/FileFunctions.hpp"
 #ifndef NO_STRING_CONVERSION
-#include "pmdb/libthoro/encoding/StringConversion.hpp"
+#include "../pmdb/libthoro/encoding/StringConversion.hpp"
 #endif
-#include "handleSpecialChars.h"
-#include "pmdb/code/MsgTemplate.hpp"
-#include "pmdb/code/bbcode/BBCode.hpp"
-#include "pmdb/code/bbcode/BBCodeParser.hpp"
-#include "pmdb/code/bbcode/DefaultCodes.hpp"
-#include "pmdb/code/bbcode/HorizontalRuleBBCode.hpp"
-#include "pmdb/code/bbcode/ListBBCode.hpp"
-#include "pmdb/code/bbcode/TableBBCode.hpp"
-#include "TrimmingBBCodes.h"
-#include "htmlifyPostProcessors.h"
+#include "handleSpecialChars.hpp"
+#include "../pmdb/code/MsgTemplate.hpp"
+#include "../pmdb/code/bbcode/BBCode.hpp"
+#include "../pmdb/code/bbcode/BBCodeParser.hpp"
+#include "../pmdb/code/bbcode/DefaultCodes.hpp"
+#include "../pmdb/code/bbcode/HorizontalRuleBBCode.hpp"
+#include "../pmdb/code/bbcode/ListBBCode.hpp"
+#include "../pmdb/code/bbcode/TableBBCode.hpp"
+#include "TrimmingBBCodes.hpp"
+#include "htmlifyPostProcessors.hpp"
 
 //return codes
 const int rcInvalidParameter = 1;

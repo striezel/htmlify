@@ -18,10 +18,10 @@
  -------------------------------------------------------------------------------
 */
 
-#ifndef TRIMMINGBBCODES_H
-#define TRIMMINGBBCODES_H
+#ifndef TRIMMINGBBCODES_HPP
+#define TRIMMINGBBCODES_HPP
 
-#include "pmdb/code/bbcode/BBCode.hpp"
+#include "../pmdb/code/bbcode/BBCode.hpp"
 
 std::string trimPrefix(std::string text, const std::string& prefix)
 {
@@ -92,4 +92,4 @@ struct AdvancedTrimBBCode: public AdvancedTplAmpTransformBBCode
     std::string m_Prefix;
 };//struct
 
-#endif // TRIMMINGBBCODES_H
+#endif // TRIMMINGBBCODES_HPP

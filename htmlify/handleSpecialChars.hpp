@@ -18,8 +18,8 @@
  -------------------------------------------------------------------------------
 */
 
-#ifndef HANDLESPECIALCHARS_H
-#define HANDLESPECIALCHARS_H
+#ifndef HANDLESPECIALCHARS_HPP
+#define HANDLESPECIALCHARS_HPP
 
 #include <string>
 #include <map>
@@ -46,4 +46,4 @@ void handleSpecialChars(std::string& text)
   }//while specChars
 }
 
-#endif // HANDLESPECIALCHARS_H
+#endif // HANDLESPECIALCHARS_HPP

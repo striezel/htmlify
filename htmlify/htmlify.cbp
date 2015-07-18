@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="htmlify" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/htmlify" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+					<Add option="-DDEBUG" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/htmlify" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O3" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+			<Target title="Release_no-conv">
+				<Option output="bin/Release_no-conv/htmlify" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="bin/Release_no-conv/" />
+				<Option object_output="obj/Release_no-conv/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O3" />
+					<Add option="-DNO_STRING_CONVERSION" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-fexceptions" />
+			<Add option="-DNO_SMILIES_IN_PARSER" />
+		</Compiler>
+		<Unit filename="TrimmingBBCodes.hpp" />
+		<Unit filename="handleSpecialChars.hpp" />
+		<Unit filename="htmlifyPostProcessors.hpp" />
+		<Unit filename="main.cpp" />
+		<Unit filename="../pmdb/code/MsgTemplate.cpp" />
+		<Unit filename="../pmdb/code/MsgTemplate.hpp" />
+		<Unit filename="../pmdb/code/bbcode/AdvancedTemplateBBCode.cpp" />
+		<Unit filename="../pmdb/code/bbcode/AdvancedTemplateBBCode.hpp" />
+		<Unit filename="../pmdb/code/bbcode/AdvancedTplAmpTransformBBCode.hpp" />
+		<Unit filename="../pmdb/code/bbcode/BBCode.hpp" />
+		<Unit filename="../pmdb/code/bbcode/BBCodeParser.cpp" />
+		<Unit filename="../pmdb/code/bbcode/BBCodeParser.hpp" />
+		<Unit filename="../pmdb/code/bbcode/CustomizedSimpleBBCode.cpp" />
+		<Unit filename="../pmdb/code/bbcode/CustomizedSimpleBBCode.hpp" />
+		<Unit filename="../pmdb/code/bbcode/DefaultCodes.hpp" />
+		<Unit filename="../pmdb/code/bbcode/HorizontalRuleBBCode.cpp" />
+		<Unit filename="../pmdb/code/bbcode/HorizontalRuleBBCode.hpp" />
+		<Unit filename="../pmdb/code/bbcode/ListBBCode.cpp" />
+		<Unit filename="../pmdb/code/bbcode/ListBBCode.hpp" />
+		<Unit filename="../pmdb/code/bbcode/Notifier.hpp" />
+		<Unit filename="../pmdb/code/bbcode/SimpleBBCode.cpp" />
+		<Unit filename="../pmdb/code/bbcode/SimpleBBCode.hpp" />
+		<Unit filename="../pmdb/code/bbcode/SimpleTemplateBBCode.cpp" />
+		<Unit filename="../pmdb/code/bbcode/SimpleTemplateBBCode.hpp" />
+		<Unit filename="../pmdb/code/bbcode/SimpleTplAmpTransformBBCode.hpp" />
+		<Unit filename="../pmdb/code/bbcode/TableBBCode.cpp" />
+		<Unit filename="../pmdb/code/bbcode/TableBBCode.hpp" />
+		<Unit filename="../pmdb/code/bbcode/TextProcessor.hpp" />
+		<Unit filename="../pmdb/code/bbcode/quotes.cpp" />
+		<Unit filename="../pmdb/code/bbcode/quotes.hpp" />
+		<Unit filename="../pmdb/libthoro/common/StringUtils.cpp" />
+		<Unit filename="../pmdb/libthoro/common/StringUtils.h" />
+		<Unit filename="../pmdb/libthoro/encoding/StringConversion.cpp">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="../pmdb/libthoro/encoding/StringConversion.hpp">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="../pmdb/libthoro/filesystem/FileFunctions.cpp" />
+		<Unit filename="../pmdb/libthoro/filesystem/FileFunctions.hpp" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

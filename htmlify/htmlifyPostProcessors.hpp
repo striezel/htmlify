@@ -18,10 +18,10 @@
  -------------------------------------------------------------------------------
 */
 
-#ifndef HTMLIFYPOSTPROCESSORS_H
-#define HTMLIFYPOSTPROCESSORS_H
+#ifndef HTMLIFYPOSTPROCESSORS_HPP
+#define HTMLIFYPOSTPROCESSORS_HPP
 
-#include "pmdb/code/bbcode/TextProcessor.hpp"
+#include "../pmdb/code/bbcode/TextProcessor.hpp"
 
 /* struct NormalisingPreProcessor:
       "normalises" line breaks by replacing \r\n (Windows style) by \n (Unix style)
@@ -155,4 +155,4 @@ struct TDR_PostProcessor: public TextProcessor
     }
 };//struct
 
-#endif // HTMLIFYPOSTPROCESSORS_H
+#endif // HTMLIFYPOSTPROCESSORS_HPP
