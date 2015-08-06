@@ -22,6 +22,8 @@
 #define TRIMMINGBBCODES_HPP
 
 #include "../pmdb/code/bbcode/BBCode.hpp"
+#include "../pmdb/code/bbcode/SimpleTplAmpTransformBBCode.hpp"
+#include "../pmdb/code/bbcode/AdvancedTplAmpTransformBBCode.hpp"
 
 std::string trimPrefix(std::string text, const std::string& prefix)
 {
