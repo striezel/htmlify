@@ -2,10 +2,9 @@ language: cpp
 compiler:
   - clang
   - gcc
-# send to container-based infrastructure -> faster
-sudo: false
 before_install:
   - git submodule update --init --recursive
+  - sudo apt-get install freeglut3-dev libglfw-dev libxml2-dev zlib1g-dev -y
 script:
   - ./pmdb/ci/cpplint.sh
   - mkdir ./build
