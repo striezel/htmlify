@@ -8,9 +8,9 @@ snippets.
 The text is read from one or more input file(s), which have to be specified as
 command-line arguments to the program.
 
-# Building htmlify from source
+## Building htmlify from source
 
-## Prerequisites
+### Prerequisites
 
 To build htmlify from source you need a C++ compiler and CMake 2.8 or later.
 It also helps to have Git, a distributed version control system, on your build
@@ -26,7 +26,7 @@ or
 
 into a root terminal.
 
-## Getting the source code
+### Getting the source code
 
 Get the source directly from Git by cloning the Git repository and change to
 the directory after the repository is completely cloned:
@@ -38,7 +38,7 @@ the directory after the repository is completely cloned:
 The last of the lines above initializes and updates the submodules that the
 htmlify source code needs, too, to be build from source.
 
-## Build process
+### Build process
 
 The build process is relatively easy, because CMake does all the preparations.
 Starting in the root directory of the source, you can do the following steps:
@@ -50,12 +50,7 @@ Starting in the root directory of the source, you can do the following steps:
 
 Now the htmlify binary is built and ready for use.
 
-# Installing htmlify via package manager
-
-There are no .deb or .rpm packages yet, so the build from source is currently
-the only way to get htmlify.
-
-# Copyright and Licensing
+## Copyright and Licensing
 
 Copyright 2012-2015 Thoronador
 
