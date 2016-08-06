@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of htmlify.
-    Copyright (C) 2012, 2013  Dirk Stolle
+    Copyright (C) 2012, 2013, 2016  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -23,9 +23,9 @@
 #include <set>
 #include <string>
 #include <cstring>
-#include "../pmdb/libthoro/filesystem/FileFunctions.hpp"
+#include "../pmdb/libstriezel/filesystem/file.hpp"
 #ifndef NO_STRING_CONVERSION
-#include "../pmdb/libthoro/encoding/StringConversion.hpp"
+#include "../pmdb/libstriezel/encoding/StringConversion.hpp"
 #endif
 #include "handleSpecialChars.hpp"
 #include "../pmdb/code/MsgTemplate.hpp"
@@ -336,7 +336,7 @@ int main(int argc, char **argv)
           hasSetTableLimit = true;
           std::cout << "No table limit will be set.\n";
         }//param == no-table-limit
-        else if (libthoro::filesystem::File::exists(param))
+        else if (libstriezel::filesystem::file::exists(param))
         {
           if (pathTexts.find(param)!=pathTexts.end())
           {
@@ -508,7 +508,7 @@ int main(int argc, char **argv)
     {
       //convert content to iso-8859-1
       std::string iso_content;
-      if (!libthoro::encoding::utf8_to_iso8859_1(content, iso_content))
+      if (!libstriezel::encoding::utf8_to_iso8859_1(content, iso_content))
       {
         std::cout << "Error: Conversion from UTF-8 failed!\n";
         return rcConversionFail;

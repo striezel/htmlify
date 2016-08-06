@@ -16,9 +16,9 @@ set(htmlify_sources
     ../pmdb/code/bbcode/SimpleTemplateBBCode.cpp
     ../pmdb/code/bbcode/TableBBCode.cpp
     ../pmdb/code/bbcode/quotes.cpp
-    ../pmdb/libthoro/common/StringUtils.cpp
-    ../pmdb/libthoro/encoding/StringConversion.cpp
-    ../pmdb/libthoro/filesystem/FileFunctions.cpp
+    ../pmdb/libstriezel/common/StringUtils.cpp
+    ../pmdb/libstriezel/encoding/StringConversion.cpp
+    ../pmdb/libstriezel/filesystem/file.cpp
     main.cpp)
 
 if (CMAKE_COMPILER_IS_GNUCC)
