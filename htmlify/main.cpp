@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of htmlify.
-    Copyright (C) 2012, 2013  Thoronador
+    Copyright (C) 2012, 2013  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -48,7 +48,7 @@ const int rcConversionFail   = 3;
 void showGPLNotice()
 {
   std::cout << "htmlify\n"
-            << "  Copyright (C) 2012, 2013 Thoronador\n"
+            << "  Copyright (C) 2012, 2013 Dirk Stolle\n"
             << "\n"
             << "  This programme is free software: you can redistribute it and/or\n"
             << "  modify it under the terms of the GNU General Public License as published\n"
