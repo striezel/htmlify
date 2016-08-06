@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of htmlify.
-    Copyright (C) 2012  Thoronador
+    Copyright (C) 2012  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@
 std::string trimPrefix(std::string text, const std::string& prefix)
 {
   const std::string::size_type prefix_len = prefix.length();
-  if ((text.find(prefix)==0) and (text.length()>prefix_len))
+  if ((text.find(prefix) == 0) and (text.length() > prefix_len))
     text.erase(0, prefix_len);
   return text;
 }

@@ -44,14 +44,11 @@
 			</Target>
 		</Build>
 		<Compiler>
+			<Add option="-std=c++11" />
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 			<Add option="-DNO_SMILIES_IN_PARSER" />
 		</Compiler>
-		<Unit filename="TrimmingBBCodes.hpp" />
-		<Unit filename="handleSpecialChars.hpp" />
-		<Unit filename="htmlifyPostProcessors.hpp" />
-		<Unit filename="main.cpp" />
 		<Unit filename="../pmdb/code/MsgTemplate.cpp" />
 		<Unit filename="../pmdb/code/MsgTemplate.hpp" />
 		<Unit filename="../pmdb/code/bbcode/AdvancedTemplateBBCode.cpp" />
@@ -90,6 +87,10 @@
 		</Unit>
 		<Unit filename="../pmdb/libthoro/filesystem/FileFunctions.cpp" />
 		<Unit filename="../pmdb/libthoro/filesystem/FileFunctions.hpp" />
+		<Unit filename="TrimmingBBCodes.hpp" />
+		<Unit filename="handleSpecialChars.hpp" />
+		<Unit filename="htmlifyPostProcessors.hpp" />
+		<Unit filename="main.cpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />

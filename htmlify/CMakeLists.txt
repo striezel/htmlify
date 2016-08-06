@@ -3,7 +3,7 @@ cmake_minimum_required (VERSION 2.8)
 
 project(htmlify)
 
-add_definitions(-DNO_SMILIES_IN_PARSER)
+add_definitions(-DNO_SMILIES_IN_PARSER -std=c++0x)
 
 set(htmlify_sources
     ../pmdb/code/MsgTemplate.cpp

@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of htmlify.
-    Copyright (C) 2012  Dirk Stolle
+    Copyright (C) 2012, 2016  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@ struct NormalisingPreProcessor: public TextProcessor
     {
       std::string needle = "\r\n";
       std::string::size_type pos = text.find(needle);
-      while (pos!=std::string::npos)
+      while (pos != std::string::npos)
       {
         text.replace(pos, needle.length(), "\n");
         pos = text.find(needle, pos);
@@ -61,7 +61,7 @@ struct TablePostProcessor: public TextProcessor
     {
       std::string needle = "\n<tr class=\"grid_tr\">\n";
       std::string::size_type pos = text.find(needle);
-      while (pos!=std::string::npos)
+      while (pos != std::string::npos)
       {
         text.replace(pos, needle.length(), "\n  <tr class=\"grid_tr\">\n");
         pos = text.find(needle, pos+10);
@@ -69,7 +69,7 @@ struct TablePostProcessor: public TextProcessor
 
       needle = "\n</tr>\n";
       pos = text.find(needle);
-      while (pos!=std::string::npos)
+      while (pos != std::string::npos)
       {
         text.replace(pos, needle.length(), "\n  </tr>\n");
         pos = text.find(needle, pos+12);
@@ -77,7 +77,7 @@ struct TablePostProcessor: public TextProcessor
 
       needle = "\n<td class=\"grid_td\">";
       pos = text.find(needle);
-      while (pos!=std::string::npos)
+      while (pos != std::string::npos)
       {
         text.replace(pos, needle.length(), "\n    <td class=\"grid_td\">");
         pos = text.find(needle, pos+12);
@@ -85,7 +85,7 @@ struct TablePostProcessor: public TextProcessor
 
       needle = "><tr";
       pos = text.find(needle);
-      while (pos!=std::string::npos)
+      while (pos != std::string::npos)
       {
         text.replace(pos, needle.length(), ">\n  <tr");
         pos = text.find(needle, pos+6);
@@ -93,7 +93,7 @@ struct TablePostProcessor: public TextProcessor
 
       needle = "><td";
       pos = text.find(needle);
-      while (pos!=std::string::npos)
+      while (pos != std::string::npos)
       {
         text.replace(pos, needle.length(), ">\n    <td");
         pos = text.find(needle, pos+9);
@@ -101,7 +101,7 @@ struct TablePostProcessor: public TextProcessor
 
       needle = "></tr>";
       pos = text.find(needle);
-      while (pos!=std::string::npos)
+      while (pos != std::string::npos)
       {
         text.replace(pos, needle.length(), ">\n  </tr>");
         pos = text.find(needle, pos+9);
@@ -109,7 +109,7 @@ struct TablePostProcessor: public TextProcessor
 
       needle = "></table>";
       pos = text.find(needle);
-      while (pos!=std::string::npos)
+      while (pos != std::string::npos)
       {
         text.replace(pos, needle.length(), ">\n</table>");
         pos = text.find(needle, pos+10);
@@ -139,7 +139,7 @@ struct TDR_PostProcessor: public TextProcessor
     {
       std::string needle = "<center>\n";
       std::string::size_type pos = text.find(needle);
-      while (pos!=std::string::npos)
+      while (pos != std::string::npos)
       {
         text.replace(pos, needle.length(), "\n<center>");
         pos = text.find(needle, pos+8);
@@ -147,7 +147,7 @@ struct TDR_PostProcessor: public TextProcessor
 
       needle = "\n</center>";
       pos = text.find(needle);
-      while (pos!=std::string::npos)
+      while (pos != std::string::npos)
       {
         text.replace(pos, needle.length(), "</center>\n");
         pos = text.find(needle, pos+8);

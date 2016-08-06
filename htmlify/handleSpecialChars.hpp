@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of htmlify.
-    Copyright (C) 2012  Dirk Stolle
+    Copyright (C) 2012, 2016  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,8 +18,8 @@
  -------------------------------------------------------------------------------
 */
 
-#ifndef HANDLESPECIALCHARS_HPP
-#define HANDLESPECIALCHARS_HPP
+#ifndef HTMLIFY_HANDLESPECIALCHARS_HPP
+#define HTMLIFY_HANDLESPECIALCHARS_HPP
 
 #include <string>
 #include <map>
@@ -27,23 +27,25 @@
 void handleSpecialChars(std::string& text)
 {
   std::map<std::string, std::string> specChars;
-  specChars["Ä"] = "&Auml;"; specChars["ä"] = "&auml;";
-  specChars["Ö"] = "&Ouml;"; specChars["ö"] = "&ouml;";
-  specChars["Ü"] = "&Uuml;"; specChars["ü"] = "&uuml;";
+  //some "special" characters used in German
+  specChars["Ä"] = "&Auml;";
+  specChars["ä"] = "&auml;";
+  specChars["Ö"] = "&Ouml;";
+  specChars["ö"] = "&ouml;";
+  specChars["Ü"] = "&Uuml;";
+  specChars["ü"] = "&uuml;";
   specChars["ß"] = "&szlig;";
 
-  std::map<std::string, std::string>::const_iterator map_iter = specChars.begin();
-  while (map_iter!=specChars.end())
+  for(auto & item : specChars)
   {
-    std::string::size_type pos = text.find(map_iter->first);
-    const std::string::size_type len = map_iter->first.length();
-    while (pos!=std::string::npos)
+    std::string::size_type pos = text.find(item.first);
+    const std::string::size_type len = item.first.length();
+    while (pos != std::string::npos)
     {
-      text.replace(pos, len, map_iter->second);
-      pos = text.find(map_iter->first, pos);
-    }//while (inner)
-    ++map_iter;
-  }//while specChars
+      text.replace(pos, len, item.second);
+      pos = text.find(item.first, pos);
+    }//while
+  }//for (range-based)
 }
 
-#endif // HANDLESPECIALCHARS_HPP
+#endif // HTMLIFY_HANDLESPECIALCHARS_HPP
