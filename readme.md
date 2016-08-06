@@ -1,6 +1,6 @@
 # htmlify
 
-[![Build Status](https://travis-ci.org/Thoronador/htmlify.svg?branch=master)](https://travis-ci.org/Thoronador/htmlify)
+[![Build Status](https://travis-ci.org/striezel/htmlify.svg?branch=master)](https://travis-ci.org/striezel/htmlify)
 
 htmlify is a small command-line tool that can be used to transform BB code
 text input (as seen in some bulletin board softwares) to proper HTML or XHTML
@@ -52,7 +52,7 @@ Now the htmlify binary is built and ready for use.
 
 ## Copyright and Licensing
 
-Copyright 2012-2015 Thoronador
+Copyright 2012-2015 Dirk Stolle
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
