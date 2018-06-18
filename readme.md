@@ -31,7 +31,7 @@ into a root terminal.
 Get the source directly from Git by cloning the Git repository and change to
 the directory after the repository is completely cloned:
 
-    git clone https://github.com/Thoronador/htmlify.git ./htmlify
+    git clone https://gitlab.com/striezel/htmlify.git ./htmlify
     cd htmlify
     git submodule update --init --recursive
 
