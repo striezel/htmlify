@@ -15,6 +15,7 @@ addons:
     - freeglut3-dev
     - libarchive-dev
     - libglfw-dev
+    - libunshield-dev
     - libxml2-dev
     - libzip-dev
     - zlib1g-dev
