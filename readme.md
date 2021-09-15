@@ -1,6 +1,6 @@
 # htmlify
 
-[![Build Status](https://travis-ci.org/striezel/htmlify.svg?branch=master)](https://travis-ci.org/striezel/htmlify)
+[![GitLab pipeline status](https://gitlab.com/striezel/htmlify/badges/master/pipeline.svg)](https://gitlab.com/striezel/htmlify/-/pipelines)
 
 htmlify is a small command-line tool that can be used to transform BB code
 text input (as seen in some bulletin board softwares) to proper HTML or XHTML
