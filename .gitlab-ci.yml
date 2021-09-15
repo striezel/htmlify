@@ -1,18 +1,37 @@
 # Use the official gcc image, based on debian.
 # It can use version tags as well, like gcc:5.2.
 # See https://hub.docker.com/_/gcc/ for more info.
-image: gcc
+image: gcc:11
 
 variables:
   GIT_SUBMODULE_STRATEGY: recursive
-build:
+
+build_gcc:
   stage: build
   before_script: 
     - apt-get update
-    - apt-get -y install cmake freeglut3-dev git libarchive-dev libunshield-dev libxml2 libxml2-dev libzip-dev zlib1g-dev
-    - git submodule update --init --recursive
+    - apt-get -y install cmake libxml2 libxml2-dev pkg-config zlib1g-dev
+    # Remove parts of the submodule that are not used but would get into CI's
+    # way when linting.
+    - rm -rf ./pmdb/libstriezel/archive ./pmdb/libstriezel/common/graphics ./pmdb/libstriezel/common/gui ./pmdb/libstriezel/tests
   script:
-    - rm ./pmdb/libstriezel/common/gui/glfw*
+    - ./pmdb/ci/cpplint.sh
+    - mkdir ./build
+    - cd ./build
+    - cmake ../
+    - make -j4
+
+build_clang:
+  image: debian:11-slim
+  stage: build
+  before_script:
+    - apt-get update
+    - apt-get -y install cmake clang libxml2 libxml2-dev pkg-config zlib1g-dev
+    # Remove parts of the submodule that are not used but would get into CI's
+    # way when linting.
+    - rm -rf ./pmdb/libstriezel/archive ./pmdb/libstriezel/common/graphics ./pmdb/libstriezel/common/gui ./pmdb/libstriezel/tests
+    - export CC=clang && export CXX=clang++
+  script:
     - ./pmdb/ci/cpplint.sh
     - mkdir ./build
     - cd ./build
