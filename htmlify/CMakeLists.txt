@@ -4,7 +4,7 @@ project(htmlify)
 
 add_definitions(-DNO_SMILIES_IN_PARSER)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(htmlify_sources
