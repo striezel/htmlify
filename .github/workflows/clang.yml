@@ -1,0 +1,33 @@
+name: Clang
+
+on: push
+
+jobs:
+  ubuntu_clang:
+    runs-on: ubuntu-20.04
+    strategy:
+      fail-fast: false
+      matrix:
+        version: [7, 8, 9, 10, 11]
+    steps:
+      # Checks-out the repository under $GITHUB_WORKSPACE.
+      - uses: actions/checkout@v3
+        with:
+          submodules: 'recursive'
+      - name: Install Debian packages
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y catch cmake clang-${{ matrix.version }} libxml2-dev pkg-config zlib1g-dev
+      - name: Install LLVM C++ Standard Library
+        run: |
+          sudo apt-get install -y libc++-${{ matrix.version }}-dev
+        if: matrix.version == 8
+      - name: Build with Clang ${{ matrix.version }}
+        run: |
+          export CXX=clang++-${{ matrix.version }}
+          export CC=clang-${{ matrix.version }}
+          cd $GITHUB_WORKSPACE
+          mkdir build
+          cd build
+          cmake ../
+          make -j4
