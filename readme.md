@@ -14,7 +14,9 @@ command-line arguments to the program.
 
 ### Prerequisites
 
-To build htmlify from source you need a C++ compiler and CMake 3.8 or later.
+To build htmlify from source you need a C++ compiler with support for C++17 and
+CMake 3.8 or later.
+
 It also helps to have Git, a distributed version control system, on your build
 system to get the latest source code directly from the Git repository.
 
