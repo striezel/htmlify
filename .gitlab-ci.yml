@@ -1,7 +1,7 @@
 # Use the official gcc image, based on debian.
 # It can use version tags as well, like gcc:5.2.
 # See https://hub.docker.com/_/gcc/ for more info.
-image: gcc:11
+image: gcc:12
 
 variables:
   GIT_SUBMODULE_STRATEGY: recursive
@@ -10,7 +10,7 @@ build_gcc:
   stage: build
   before_script: 
     - apt-get update
-    - apt-get -y install cmake libxml2 libxml2-dev pkg-config zlib1g-dev
+    - apt-get -y install catch2 cmake libxml2 libxml2-dev pkg-config zlib1g-dev
     # Remove parts of the submodule that are not used but would get into CI's
     # way when linting.
     - rm -rf ./pmdb/libstriezel/archive ./pmdb/libstriezel/common/graphics ./pmdb/libstriezel/common/gui ./pmdb/libstriezel/tests
@@ -22,11 +22,11 @@ build_gcc:
     - make -j4
 
 build_clang:
-  image: debian:11-slim
+  image: debian:12-slim
   stage: build
   before_script:
     - apt-get update
-    - apt-get -y install cmake clang libxml2 libxml2-dev pkg-config zlib1g-dev
+    - apt-get -y install catch2 cmake clang libxml2 libxml2-dev pkg-config zlib1g-dev
     # Remove parts of the submodule that are not used but would get into CI's
     # way when linting.
     - rm -rf ./pmdb/libstriezel/archive ./pmdb/libstriezel/common/graphics ./pmdb/libstriezel/common/gui ./pmdb/libstriezel/tests
