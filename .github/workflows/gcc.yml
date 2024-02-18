@@ -28,3 +28,14 @@ jobs:
           cmake ../
           make -j4
           ctest -V
+      - name: Build with GNU GCC ${{ matrix.version }} - static linking
+        run: |
+          export CXX=g++-${{ matrix.version }}
+          export CC=gcc-${{ matrix.version }}
+          cd $GITHUB_WORKSPACE
+          mkdir build-static
+          cd build-static
+          cmake .. -DENABLE_STATIC_LINKING=ON -DENABLE_LTO=ON
+          cmake --build . -j2
+        # Only do static build on latest version in the matrix.
+        if: matrix.version == 11

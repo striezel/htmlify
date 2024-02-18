@@ -32,3 +32,14 @@ jobs:
           cmake ../
           make -j4
           ctest -V
+      - name: Build with Clang ${{ matrix.version }} - static linking
+        run: |
+          export CXX=clang++-${{ matrix.version }}
+          export CC=clang-${{ matrix.version }}
+          cd $GITHUB_WORKSPACE
+          mkdir build-static
+          cd build-static
+          cmake .. -DENABLE_STATIC_LINKING=ON -DENABLE_LTO=ON
+          cmake --build . -j2
+        # Only do static build on latest version in the matrix.
+        if: matrix.version == 11
