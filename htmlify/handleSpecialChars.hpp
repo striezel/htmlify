@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of htmlify.
-    Copyright (C) 2012, 2016  Dirk Stolle
+    Copyright (C) 2012, 2016, 2024  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -26,26 +26,26 @@
 
 void handleSpecialChars(std::string& text)
 {
-  std::map<std::string, std::string> specChars;
-  //some "special" characters used in German
-  specChars["Ä"] = "&Auml;";
-  specChars["ä"] = "&auml;";
-  specChars["Ö"] = "&Ouml;";
-  specChars["ö"] = "&ouml;";
-  specChars["Ü"] = "&Uuml;";
-  specChars["ü"] = "&uuml;";
-  specChars["ß"] = "&szlig;";
+  // some "special" characters used in German
+  const std::map<char, std::string> specChars = {
+    {'\xC4', "&Auml;"},
+    {'\xE4', "&auml;"},
+    {'\xD6', "&Ouml;"},
+    {'\xF6', "&ouml;"},
+    {'\xDC', "&Uuml;"},
+    {'\xFC', "&uuml;"},
+    {'\xDF', "&szlig;"}
+  };
 
-  for(auto & item : specChars)
+  for(const auto & [special_char, replacement] : specChars)
   {
-    std::string::size_type pos = text.find(item.first);
-    const std::string::size_type len = item.first.length();
+    std::string::size_type pos = text.find(special_char);
     while (pos != std::string::npos)
     {
-      text.replace(pos, len, item.second);
-      pos = text.find(item.first, pos);
-    }//while
-  }//for (range-based)
+      text.replace(pos, 1, replacement);
+      pos = text.find(special_char, pos);
+    }
+  }
 }
 
 #endif // HTMLIFY_HANDLESPECIALCHARS_HPP
