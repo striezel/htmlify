@@ -27,3 +27,4 @@ jobs:
           cd build
           cmake ../
           make -j4
+          ctest -V

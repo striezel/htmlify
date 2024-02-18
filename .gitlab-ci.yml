@@ -20,6 +20,7 @@ build_gcc:
     - cd ./build
     - cmake ../
     - make -j4
+    - ctest -V
 
 build_clang:
   image: debian:12-slim
@@ -37,3 +38,4 @@ build_clang:
     - cd ./build
     - cmake ../
     - make -j4
+    - ctest -V

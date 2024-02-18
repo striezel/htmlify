@@ -30,3 +30,27 @@ endif ()
 set( CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -s" )
 
 add_executable(htmlify ${htmlify_sources})
+
+
+# #################### #
+# tests for executable #
+# #################### #
+
+# add tests for --version and --help parameters
+# default help parameter "--help"
+add_test(NAME htmlify_help
+         COMMAND $<TARGET_FILE:htmlify> --help)
+
+# short help parameter with question mark "-?"
+add_test(NAME htmlify_help_question_mark
+         COMMAND $<TARGET_FILE:htmlify> -?)
+
+# Windows-style help parameter "/?"
+if (NOT DEFINED ENV{GITHUB_ACTIONS} OR NOT MINGW)
+    add_test(NAME htmlify_help_question_mark_windows
+             COMMAND $<TARGET_FILE:htmlify> /?)
+endif ()
+
+# parameter to show version number
+add_test(NAME htmlify_version
+         COMMAND $<TARGET_FILE:htmlify> --version)
