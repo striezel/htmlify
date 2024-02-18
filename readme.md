@@ -50,7 +50,7 @@ Starting in the root directory of the source, you can do the following steps:
     mkdir build
     cd build
     cmake ../
-    make -j2
+    cmake --build . -j2
 
 Now the htmlify binary is built and ready for use.
 
