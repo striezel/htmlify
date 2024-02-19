@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of htmlify.
-    Copyright (C) 2012, 2013, 2016  Dirk Stolle
+    Copyright (C) 2012, 2013, 2016, 2024  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@
 #include "TrimmingBBCodes.hpp"
 #include "htmlifyPostProcessors.hpp"
 
-//return codes
+// return codes
 const int rcInvalidParameter = 1;
 const int rcFileError        = 2;
 #ifndef NO_STRING_CONVERSION
@@ -77,7 +77,7 @@ void showVersion()
 
 void showHelp(const std::string& name)
 {
-  std::cout << "\n"<<name<<" [--html|--xhtml] FILENAME\n"
+  std::cout << "\n" << name << " [--html|--xhtml] FILENAME\n"
             << "options:\n"
             << "  --help           - displays this help message and quits\n"
             << "  -?               - same as --help\n"
@@ -108,9 +108,9 @@ void showHelp(const std::string& name)
             << "  --cell=CLASS     - sets the class for grids in <td> to CLASS.\n"
             << "  --std-classes    - sets the 'standard' classes for the three class options.\n"
             << "                     This is equivalent to specifying all these parameters:\n"
-            << "                         --table="<<TableBBCode::DefaultTableClass<<"\n"
-            << "                         --row="<<TableBBCode::DefaultRowClass<<"\n"
-            << "                         --cell="<<TableBBCode::DefaultCellClass<<"\n"
+            << "                         --table=" << TableBBCode::DefaultTableClass << "\n"
+            << "                         --row=" << TableBBCode::DefaultRowClass << "\n"
+            << "                         --cell=" << TableBBCode::DefaultCellClass << "\n"
             << "  --max-table-width=WIDTH\n"
             << "                   - sets the maximum width that is allowed for tables to\n"
             << "                     WIDTH pixels. Larger values will be discarded. Zero will\n"
@@ -119,7 +119,7 @@ void showHelp(const std::string& name)
             << "                     Mutually exclusive with --max-table-width=WIDTH.\n";
 }
 
-int main(int argc, char **argv)
+int main(int argc, char* argv[])
 {
   std::set<std::string> pathTexts;
   bool doXHTML = false;
@@ -138,197 +138,199 @@ int main(int argc, char **argv)
   unsigned int tableLimit = 0;
   bool hasSetTableLimit = false;
 
-  if ((argc>1) and (argv!=NULL))
+  if ((argc > 1) && (argv != nullptr))
   {
-    int i=1;
-    while (i<argc)
+    int i = 1;
+    while (i < argc)
     {
-      if (argv[i]!=NULL)
+      if (argv[i] != nullptr)
       {
         const std::string param = std::string(argv[i]);
-        //help parameter
-        if ((param=="--help") or (param=="-?") or (param=="/?"))
+        // help parameter
+        if ((param == "--help") || (param == "-?") || (param == "/?"))
         {
           showHelp(argv[0]);
           return 0;
-        }//param == help
-        //version information requested?
-        else if ((param=="--version") or (param=="-v"))
+        }
+        // version information requested?
+        else if ((param == "--version") || (param == "-v"))
         {
           showVersion();
           return 0;
-        }//param == version
-        else if ((param=="--html") or (param=="--html4"))
+        }
+        else if ((param == "--html") || (param == "--html4"))
         {
           if (htmlModeSpecified)
           {
-            std::cout << "Parameter "<<param<<" must not occur more than once "
-                      << "and is mutually exclusive with --xhtml!\n";
+            std::cerr << "Parameter " << param << " must not occur more than "
+                      << "once and is mutually exclusive with --xhtml!\n";
             return rcInvalidParameter;
           }
           doXHTML = false;
           htmlModeSpecified = true;
-        }//param == html
-        else if ((param=="--xhtml") or (param=="--XHTML"))
+        }
+        else if ((param == "--xhtml") || (param == "--XHTML"))
         {
           if (htmlModeSpecified)
           {
-            std::cout << "Parameter "<<param<<" must not occur more than once "
-                      << "and is mutually exclusive with --html!\n";
+            std::cerr << "Parameter " << param << " must not occur more than "
+                      << "once and is mutually exclusive with --html!\n";
             return rcInvalidParameter;
           }
           doXHTML = true;
           htmlModeSpecified = true;
-        }//param == xhtml
-        else if ((param=="-t") or (param=="--trim"))
+        }
+        else if ((param == "-t") || (param == "--trim"))
         {
-          if ((i+1<argc) and (argv[i+1]!=NULL))
+          if ((i+1 < argc) && (argv[i+1] != nullptr))
           {
             if (!trimmablePrefix.empty())
             {
-              std::cout << "Parameter "<<param<<" must not occur more than once!\n";
+              std::cerr << "Parameter " << param << " must not occur more than once!\n";
               return rcInvalidParameter;
             }
             trimmablePrefix = std::string(argv[i+1]);
-            ++i; //skip next parameter, because it's used as prefix already
-            std::cout << "Trimmable prefix was set to \""<<trimmablePrefix<<"\".\n";
+            ++i; // skip next parameter, because it's used as prefix already
+            std::cout << "Trimmable prefix was set to \"" << trimmablePrefix
+                      << "\".\n";
           }
           else
           {
-            std::cout << "Error: You have to specify a string after \""
-                      << param <<"\".\n";
+            std::cerr << "Error: You have to specify a string after \""
+                      << param << "\".\n";
             return rcInvalidParameter;
           }
         }//param == trim
-        else if ((param.substr(0,7)=="--trim=") and (param.length()>7))
+        else if ((param.substr(0,7) == "--trim=") && (param.length() > 7))
         {
           if (!trimmablePrefix.empty())
           {
-            std::cout << "Parameter --trim must not occur more than once!\n";
+            std::cerr << "Parameter --trim must not occur more than once!\n";
             return rcInvalidParameter;
           }
           trimmablePrefix = param.substr(7);
-          std::cout << "Trimmable prefix was set to \""<<trimmablePrefix<<"\".\n";
+          std::cout << "Trimmable prefix was set to \"" << trimmablePrefix
+                    << "\".\n";
         }//param == trim (single parameter version)
-        else if ((param=="--utf8") or (param=="--UTF-8"))
+        else if ((param == "--utf8") || (param == "--UTF-8"))
         {
           #ifndef NO_STRING_CONVERSION
           if (isUTF8)
           {
-            std::cout << "Parameter "<<param<<" must not occur more than once!\n";
+            std::cerr << "Parameter " << param << " must not occur more than once!\n";
             return rcInvalidParameter;
           }
           isUTF8 = true;
           #else
-          std::cout << "Parameter "<<param<<" is not available in the no-conv build of htmlify!\n";
+          std::cerr << "Parameter " << param << " is not available in the no-conv build of htmlify!\n";
           return rcInvalidParameter;
           #endif
-        }//param == utf8
-        else if (param=="--no-list")
+        }
+        else if (param == "--no-list")
         {
           if (noList)
           {
-            std::cout << "Parameter --no-list must not occur more than once!\n";
+            std::cerr << "Parameter --no-list must not occur more than once!\n";
             return rcInvalidParameter;
           }
           noList = true;
         }//param == no-list
-        else if ((param=="--br") or (param=="--breaks"))
+        else if ((param == "--br") || (param == "--breaks"))
         {
           if (hasSet_nl2br)
           {
-            std::cout << "Parameter "<<param<<" must not occur more than once!\n";
+            std::cerr << "Parameter " << param << " must not occur more than once!\n";
             return rcInvalidParameter;
           }
           nl2br = true;
           hasSet_nl2br = true;
         }//param == br
-        else if ((param=="--no-br") or (param=="--no-breaks"))
+        else if ((param == "--no-br") || (param == "--no-breaks"))
         {
           if (hasSet_nl2br)
           {
-            std::cout << "Parameter "<<param<<" must not occur more than once and is mutually exclusive with --br!\n";
+            std::cerr << "Parameter " << param << " must not occur more than once and is mutually exclusive with --br!\n";
             return rcInvalidParameter;
           }
           nl2br = false;
           hasSet_nl2br = true;
         }//param == br
-        else if ((param=="--no-space-trim") or (param=="--leave-spaces-alone"))
+        else if ((param == "--no-space-trim") || (param == "--leave-spaces-alone"))
         {
           if (!spaceTrim)
           {
-            std::cout << "Parameter "<<param<<" must not occur more than once!\n";
+            std::cerr << "Parameter " << param << " must not occur more than once!\n";
             return rcInvalidParameter;
           }
           spaceTrim = false;
         }//param == no-space-trim
-        else if ((param.substr(0,8)=="--table=") and (param.length()>8))
+        else if ((param.substr(0,8) == "--table=") && (param.length() > 8))
         {
           classTable = param.substr(8);
         }//param == 'table=...'
-        else if ((param.substr(0,6)=="--row=") and (param.length()>6))
+        else if ((param.substr(0,6) == "--row=") && (param.length() > 6))
         {
           classRow = param.substr(6);
         }//param == 'row=...'
-        else if ((param.substr(0,7)=="--cell=") and (param.length()>7))
+        else if ((param.substr(0,7) == "--cell=") && (param.length() > 7))
         {
           classCell = param.substr(7);
         }//param == 'cell=...'
-        else if ((param=="--std-classes") or (param=="--classes") or (param=="--default-classes"))
+        else if ((param == "--std-classes") || (param == "--classes") || (param == "--default-classes"))
         {
           classTable = TableBBCode::DefaultTableClass;
           classRow   = TableBBCode::DefaultRowClass;
           classCell  = TableBBCode::DefaultCellClass;
         }//param == std-classes
-        else if ((param=="--width-limit") or (param=="--max-table-width"))
+        else if ((param == "--width-limit") || (param == "--max-table-width"))
         {
-          if ((i+1<argc) and (argv[i+1]!=NULL))
+          if ((i+1 < argc) && (argv[i+1] != nullptr))
           {
             if (hasSetTableLimit)
             {
-              std::cout << "Parameter "<<param<<" must not occur more than once!\n";
+              std::cerr << "Parameter " << param << " must not occur more than once!\n";
               return rcInvalidParameter;
             }
             unsigned int arg_val;
             if (!stringToUnsignedInt(std::string(argv[i+1]), arg_val))
             {
-              std::cout << "Error: \""<<std::string(argv[i+1])<<"\" is not a valid, positive integer!\n";
+              std::cerr << "Error: \"" << std::string(argv[i+1]) << "\" is not a valid, positive integer!\n";
               return rcInvalidParameter;
             }
             tableLimit = arg_val;
             hasSetTableLimit = true;
             ++i; //skip next parameter, because it's used as limit already
-            std::cout << "Table width limit was set to \""<<tableLimit<<"\".\n";
+            std::cout << "Table width limit was set to \"" << tableLimit << "\".\n";
           }
           else
           {
-            std::cout << "Error: You have to specify an integer value after \""
-                      << param <<"\".\n";
+            std::cerr << "Error: You have to specify an integer value after \""
+                      << param << "\".\n";
             return rcInvalidParameter;
           }
         }//param == max-table-width
-        else if ((param.substr(0,18)=="--max-table-width=") and (param.length()>18))
+        else if ((param.substr(0,18) == "--max-table-width=") && (param.length() > 18))
         {
           if (hasSetTableLimit)
           {
-            std::cout << "Parameter --max-table-width must not occur more than once!\n";
+            std::cerr << "Parameter --max-table-width must not occur more than once!\n";
             return rcInvalidParameter;
           }
           unsigned int width_val;
           if (!stringToUnsignedInt(param.substr(18), width_val))
           {
-            std::cout << "Error: \""<<param.substr(18)<<"\" is not a valid, positive integer!\n";
+            std::cerr << "Error: \"" << param.substr(18) << "\" is not a valid, positive integer!\n";
             return rcInvalidParameter;
           }
           tableLimit = width_val;
           hasSetTableLimit = true;
-          std::cout << "Table width limit was set to \""<<tableLimit<<"\".\n";
+          std::cout << "Table width limit was set to \"" << tableLimit << "\".\n";
         }//param == max-table-width (single parameter version)
-        else if (param=="--no-table-limit")
+        else if (param == "--no-table-limit")
         {
           if (hasSetTableLimit)
           {
-            std::cout << "Parameter "<<param<<" must not occur more than once "
+            std::cerr << "Parameter " << param << " must not occur more than once "
                       << "and is mutually exclusive with --max-table width!\n";
             return rcInvalidParameter;
           }
@@ -338,34 +340,34 @@ int main(int argc, char **argv)
         }//param == no-table-limit
         else if (libstriezel::filesystem::file::exists(param))
         {
-          if (pathTexts.find(param)!=pathTexts.end())
+          if (pathTexts.find(param) != pathTexts.end())
           {
-            std::cout << "File \""<<param<<"\" was specified more than once!\n";
+            std::cerr << "File \"" << param << "\" was specified more than once!\n";
             return rcInvalidParameter;
           }
           pathTexts.insert(param);
         }
         else
         {
-          //unknown or wrong parameter
-          std::cout << "Invalid parameter given: \""<<param<<"\".\n"
+          // unknown or wrong parameter
+          std::cerr << "Invalid parameter given: \"" << param << "\".\n"
                     << "Use --help to get a list of valid parameters.\n";
           return rcInvalidParameter;
         }
       }//parameter exists
       else
       {
-        std::cout << "Parameter at index "<<i<<" is NULL.\n";
+        std::cerr << "Parameter at index " << i << " is NULL.\n";
         return rcInvalidParameter;
       }
       ++i;//on to next parameter
     }//while
   }//if arguments present
 
-  //no files to load?
+  // no files to load?
   if (pathTexts.empty())
   {
-    std::cout << "You have to specify certain parameters for this programme to run properly.\n"
+    std::cerr << "You have to specify certain parameters for this programme to run properly.\n"
               << "Use --help to get a list of valid parameters.\n";
     return rcInvalidParameter;
   }
@@ -376,9 +378,9 @@ int main(int argc, char **argv)
 
   if (!hasSetTableLimit)
   {
-    //set default value, if nothing has been set yet
+    // set default value, if nothing has been set yet
     tableLimit = 600;
-    std::cout << "Info: Table width limit was set to "<<tableLimit<<" by default.\n";
+    std::cout << "Info: Table width limit was set to " << tableLimit << " by default.\n";
   }
 
   //prepare BB codes
@@ -449,21 +451,21 @@ int main(int argc, char **argv)
 
   if (nl2br) parser.addPreProcessor(&normaliser);
   parser.addPreProcessor(&eatRedundantSpaces);
-  if (nl2br and !noList) parser.addPreProcessor(&preProc_List);
+  if (nl2br && !noList) parser.addPreProcessor(&preProc_List);
   if (spaceTrim) parser.addPreProcessor(&preProc_Spaces);
   if (nl2br) parser.addPreProcessor(&table_killLF);
   parser.addPostProcessor(&table_indent);
   parser.addPostProcessor(&tdr_post);
 
   std::set<std::string>::const_iterator iter = pathTexts.begin();
-  while (iter!=pathTexts.end())
+  while (iter != pathTexts.end())
   {
-    //read file contents
+    // read file contents
     std::ifstream input;
     input.open(iter->c_str(), std::ios_base::in | std::ios_base::binary);
     if (!input)
     {
-      std::cout << "Error: could not open file \""<<*iter<<"\"!\n";
+      std::cerr << "Error: Could not open file \"" << *iter << "\"!\n";
       return rcFileError;
     }
     input.seekg(0, std::ios_base::end);
@@ -472,45 +474,45 @@ int main(int argc, char **argv)
     if (!input.good())
     {
       #ifdef DEBUG
-      std::cout << "Error while reading file content: seek operation failed!\n";
+      std::cerr << "Error while reading file content: seek operation failed!\n";
       #endif
       input.close();
       return rcFileError;
     }
-    if (len>1024*1024)
+    if (len > 1024*1024)
     {
       #ifdef DEBUG
-      std::cout << "Error while reading file content: unexpectedly large file size!\n";
+      std::cerr << "Error while reading file content: unexpectedly large file size!\n";
       #endif
       input.close();
       return rcFileError;
     }
-    //allocate buffer - all file content should fit into it
+    // allocate buffer - all file content should fit into it
     char * buffer = new char[len+1];
     memset(buffer, '\0', len+1); //zerofill buffer
     input.read(buffer, len);
     if (!input.good())
     {
       delete[] buffer;
-      buffer = NULL;
+      buffer = nullptr;
       input.close();
-      std::cout << "Error while reading file content of \""<<*iter<<"\"!\n";
+      std::cerr << "Error while reading file content of \"" << *iter << "\"!\n";
       return rcFileError;
     }
     input.close();
 
     std::string content(buffer);
     delete[] buffer;
-    buffer = NULL;
+    buffer = nullptr;
 
     #ifndef NO_STRING_CONVERSION
     if (isUTF8)
     {
-      //convert content to iso-8859-1
+      // convert content to iso-8859-1
       std::string iso_content;
       if (!libstriezel::encoding::utf8_to_iso8859_1(content, iso_content))
       {
-        std::cout << "Error: Conversion from UTF-8 failed!\n";
+        std::cerr << "Error: Conversion from UTF-8 failed!\n";
         return rcConversionFail;
       }
       content = iso_content;
@@ -520,23 +522,23 @@ int main(int argc, char **argv)
     handleSpecialChars(content);
     content = parser.parse(content, "", doXHTML, nl2br);
 
-    //save content
+    // save content
     std::ofstream output;
     output.open((*iter + "_htmlified").c_str(), std::ios_base::out | std::ios_base::trunc | std::ios_base::binary);
     if (!output)
     {
-      std::cout << "Could not open output file "<<*iter<<"_htmlified for writing!\n";
+      std::cerr << "Could not open output file " << *iter << "_htmlified for writing!\n";
       return rcFileError;
     }
     output.write(content.c_str(), content.length());
     if (!output.good())
     {
-      std::cout << "Error while writing to file \""<<*iter<<"_htmlified\"!\n";
+      std::cerr << "Error while writing to file \"" << *iter << "_htmlified\"!\n";
       output.close();
       return rcFileError;
     }
     output.close();
-    std::cout << "Processed file "<<*iter<<"\n";
+    std::cout << "Processed file " << *iter << "\n";
     ++iter;
   }//while
   return 0;
