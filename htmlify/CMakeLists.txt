@@ -31,6 +31,18 @@ endif ()
 
 add_executable(htmlify ${htmlify_sources})
 
+if (MINGW)
+  # find iconv library
+  find_package(PkgConfig)
+  pkg_search_module(ICONV REQUIRED iconv)
+  if (ICONV_FOUND)
+    include_directories(${ICONV_INCLUDE_DIRS})
+    target_link_libraries (htmlify ${ICONV_LIBRARIES})
+  else ()
+    message ( FATAL_ERROR "libiconv was not found!")
+  endif ()
+endif ()
+
 
 # #################### #
 # tests for executable #

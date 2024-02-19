@@ -1,0 +1,47 @@
+name: MSYS2
+
+on: push
+
+jobs:
+  msys2_mingw64:
+    runs-on: windows-2022
+    defaults:
+      run:
+        shell: msys2 {0}
+    steps:
+      # Checks-out the repository under $GITHUB_WORKSPACE.
+      - uses: actions/checkout@v4
+        with:
+          submodules: 'recursive'
+      - uses: msys2/setup-msys2@v2
+        with:
+          msystem: mingw64
+          update: true
+          install: >-
+            git
+            mingw-w64-x86_64-cmake
+            mingw-w64-x86_64-gcc
+            mingw-w64-x86_64-ninja
+            mingw-w64-x86_64-pkg-config
+            mingw-w64-x86_64-libiconv
+      - name: Build
+        run: |
+          export MSYSTEM=MINGW64
+          export CXX=g++
+          export CC=gcc
+          cd "$GITHUB_WORKSPACE"
+          mkdir build
+          cd build
+          cmake ../
+          cmake --build . -j2
+          ctest -V
+      - name: Build statically linked
+        run: |
+          export MSYSTEM=MINGW64
+          export CXX=g++
+          export CC=gcc
+          cd "$GITHUB_WORKSPACE"
+          mkdir build-static
+          cd build-static
+          cmake -DENABLE_LTO=ON -DENABLE_STATIC_LINKING=ON ../
+          cmake --build . -j2
