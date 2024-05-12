@@ -21,7 +21,7 @@ CMake 3.8 or later.
 It also helps to have Git, a distributed version control system, on your build
 system to get the latest source code directly from the Git repository.
 
-All three can usually be installed be typing
+All three can usually be installed by typing
 
     apt-get install cmake g++ git
 
