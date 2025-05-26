@@ -1,0 +1,57 @@
+name: Alpine
+
+on: push
+
+jobs:
+  alpine:
+    runs-on: ubuntu-24.04
+    container: 'alpine:3.21'
+    steps:
+      - name: Install and prepare Git
+        run: |
+          apk update && apk upgrade
+          apk add git
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+      # Checks-out the repository under $GITHUB_WORKSPACE.
+      - uses: actions/checkout@v4
+        with:
+          submodules: 'recursive'
+          fetch-depth: 0
+      - name: Install packages
+        run: |
+          apk update
+          apk add catch2 cmake g++ libxml2-dev make pkgconf zlib-dev
+          apk add libxml2-static zlib-static
+      - name: Build statically linked binary
+        run: |
+          export CXX=g++
+          export CC=gcc
+          cd $GITHUB_WORKSPACE
+          mkdir build-static
+          cd build-static
+          cmake .. -DENABLE_STATIC_LINKING=ON -DENABLE_LTO=ON
+          cmake --build . -j2
+      - name: Run tests
+        run: |
+          cd "$GITHUB_WORKSPACE/build-static"
+          ctest -V
+      - name: Collect statically linked artifacts
+        run: |
+          cd "$GITHUB_WORKSPACE"
+          mkdir -p artifacts
+          # binary file
+          cp build-static/htmlify/htmlify artifacts/
+          # license + readme
+          cp LICENSE artifacts/
+          cp readme.md artifacts/
+          # determine version
+          VERSION=$(git describe --always)
+          echo Version is $VERSION.
+          mv artifacts htmlify-$VERSION
+          tar czf htmlify_${VERSION}_linux-amd64-generic.tar.gz htmlify-$VERSION
+      - name: Archive build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: htmlify-linux-amd64-generic
+          path: htmlify_*_linux-amd64-generic.tar.gz
+          if-no-files-found: error
