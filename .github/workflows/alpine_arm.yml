@@ -6,7 +6,7 @@ jobs:
   alpine:
     runs-on: ubuntu-24.04-arm
     container:
-      image: 'alpine:3.21'
+      image: 'alpine:3.22'
       # Volume needed for monkey-patch step.
       volumes:
         - /:/host
