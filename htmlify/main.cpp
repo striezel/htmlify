@@ -122,7 +122,7 @@ void showHelp(const std::string& name)
 int main(int argc, char* argv[])
 {
   std::set<std::string> pathTexts;
-  bool doXHTML = false;
+  HTMLStandard standard = HTMLStandard::HTML4_01;
   bool htmlModeSpecified = false;
   std::string trimmablePrefix = "";
   #ifndef NO_STRING_CONVERSION
@@ -166,7 +166,7 @@ int main(int argc, char* argv[])
                       << "once and is mutually exclusive with --xhtml!\n";
             return rcInvalidParameter;
           }
-          doXHTML = false;
+          standard = HTMLStandard::HTML4_01;
           htmlModeSpecified = true;
         }
         else if ((param == "--xhtml") || (param == "--XHTML"))
@@ -177,7 +177,7 @@ int main(int argc, char* argv[])
                       << "once and is mutually exclusive with --html!\n";
             return rcInvalidParameter;
           }
-          doXHTML = true;
+          standard = HTMLStandard::XHTML;
           htmlModeSpecified = true;
         }
         else if ((param == "-t") || (param == "--trim"))
@@ -386,29 +386,29 @@ int main(int argc, char* argv[])
   //prepare BB codes
   //image tags
   MsgTemplate tpl;
-  tpl.loadFromString(doXHTML ? "<img src=\"{..inner..}\" alt=\"\" />"
-                             : "<img src=\"{..inner..}\" alt=\"\">");
+  tpl.loadFromString(standard == HTMLStandard::XHTML ? "<img src=\"{..inner..}\" alt=\"\" />"
+                                                     : "<img src=\"{..inner..}\" alt=\"\">");
   SimpleTplAmpTransformBBCode img_simple("img", tpl, "inner");
   SimpleTrimBBCode img_simple_trim("img", tpl, "inner", trimmablePrefix);
-  //advanced image tag
-  tpl.loadFromString(doXHTML ? "<img src=\"{..inner..}\" align=\"{..attribute..}\" alt=\"\" />"
-                             : "<img src=\"{..inner..}\" align=\"{..attribute..}\" alt=\"\">");
+  // advanced image tag
+  tpl.loadFromString(standard == HTMLStandard::XHTML ? "<img src=\"{..inner..}\" align=\"{..attribute..}\" alt=\"\" />"
+                                                     : "<img src=\"{..inner..}\" align=\"{..attribute..}\" alt=\"\">");
   AdvancedTplAmpTransformBBCode img_advanced("img", tpl, "inner", "attribute");
   AdvancedTrimBBCode img_advanced_trim("img", tpl, "inner", "attribute", trimmablePrefix);
-  //simple url tag
+  // simple url tag
   tpl.loadFromString("<a href=\"{..inner..}\" target=\"_blank\">{..inner..}</a>");
   SimpleTrimBBCode url_simple_trim("url", tpl, "inner", trimmablePrefix);
-  //advanced url tag
+  // advanced url tag
   tpl.loadFromString("<a href=\"{..attribute..}\" target=\"_blank\">{..inner..}</a>");
   AdvancedTrimBBCode url_advanced_trim("url", tpl, "inner", "attribute", trimmablePrefix);
-  //tag for unordered lists
+  // tag for unordered lists
   ListBBCode list_unordered("list", true);
-  //tables
+  // tables
   TableBBCode table("table", true, classTable, classRow, classCell, tableLimit);
-  //hr code
-  HorizontalRuleBBCode hr("hr", doXHTML);
+  // hr code
+  HorizontalRuleBBCode hr("hr", standard);
 
-  //add it to the parser
+  // add it to the parser
   BBCodeParser parser;
   parser.addCode(&bbcode_default::b);
   parser.addCode(&bbcode_default::u);
@@ -457,15 +457,14 @@ int main(int argc, char* argv[])
   parser.addPostProcessor(&table_indent);
   parser.addPostProcessor(&tdr_post);
 
-  std::set<std::string>::const_iterator iter = pathTexts.begin();
-  while (iter != pathTexts.end())
+  for (const auto& path: pathTexts)
   {
     // read file contents
     std::ifstream input;
-    input.open(iter->c_str(), std::ios_base::in | std::ios_base::binary);
+    input.open(path, std::ios_base::in | std::ios_base::binary);
     if (!input)
     {
-      std::cerr << "Error: Could not open file \"" << *iter << "\"!\n";
+      std::cerr << "Error: Could not open file \"" << path << "\"!\n";
       return rcFileError;
     }
     input.seekg(0, std::ios_base::end);
@@ -488,15 +487,15 @@ int main(int argc, char* argv[])
       return rcFileError;
     }
     // allocate buffer - all file content should fit into it
-    char * buffer = new char[len+1];
-    memset(buffer, '\0', len+1); //zerofill buffer
+    char * buffer = new char[len + 1];
+    memset(buffer, '\0', len + 1); //zerofill buffer
     input.read(buffer, len);
     if (!input.good())
     {
       delete[] buffer;
       buffer = nullptr;
       input.close();
-      std::cerr << "Error while reading file content of \"" << *iter << "\"!\n";
+      std::cerr << "Error while reading file content of \"" << path << "\"!\n";
       return rcFileError;
     }
     input.close();
@@ -516,30 +515,29 @@ int main(int argc, char* argv[])
         return rcConversionFail;
       }
       content = iso_content;
-    }//if UTF-8
+    } // if UTF-8
     #endif
 
     handleSpecialChars(content);
-    content = parser.parse(content, "", doXHTML, nl2br);
+    content = parser.parse(content, "", standard, nl2br);
 
     // save content
     std::ofstream output;
-    output.open((*iter + "_htmlified").c_str(), std::ios_base::out | std::ios_base::trunc | std::ios_base::binary);
+    output.open(path + "_htmlified", std::ios_base::out | std::ios_base::trunc | std::ios_base::binary);
     if (!output)
     {
-      std::cerr << "Could not open output file " << *iter << "_htmlified for writing!\n";
+      std::cerr << "Could not open output file " << path << "_htmlified for writing!\n";
       return rcFileError;
     }
     output.write(content.c_str(), content.length());
     if (!output.good())
     {
-      std::cerr << "Error while writing to file \"" << *iter << "_htmlified\"!\n";
+      std::cerr << "Error while writing to file \"" << path << "_htmlified\"!\n";
       output.close();
       return rcFileError;
     }
     output.close();
-    std::cout << "Processed file " << *iter << "\n";
-    ++iter;
-  }//while
+    std::cout << "Processed file " << path << "\n";
+  }
   return 0;
 }

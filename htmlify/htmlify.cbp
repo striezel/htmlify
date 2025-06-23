@@ -64,6 +64,7 @@
 		<Unit filename="../pmdb/code/bbcode/CustomizedSimpleBBCode.cpp" />
 		<Unit filename="../pmdb/code/bbcode/CustomizedSimpleBBCode.hpp" />
 		<Unit filename="../pmdb/code/bbcode/DefaultCodes.hpp" />
+		<Unit filename="../pmdb/code/bbcode/HTMLStandard.hpp" />
 		<Unit filename="../pmdb/code/bbcode/HorizontalRuleBBCode.cpp" />
 		<Unit filename="../pmdb/code/bbcode/HorizontalRuleBBCode.hpp" />
 		<Unit filename="../pmdb/code/bbcode/ListBBCode.cpp" />
