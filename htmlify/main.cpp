@@ -67,7 +67,7 @@ void showHelp(const std::string& name)
             << "Converts BB code text input to proper HTML or XHTML snippets.\n"
             << '\n'
             << "options:\n"
-            << "  --help           - Displays this help message and quits\n"
+            << "  --help           - Displays this help message and quits.\n"
             << "  -?               - same as --help\n"
             << "  --version        - Displays the version of the program and quits.\n"
             << "  -v               - same as --version\n"
