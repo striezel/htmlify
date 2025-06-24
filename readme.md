@@ -37,7 +37,7 @@ options:
   --no-list        - Do not parse [LIST] codes when creating (X)HTML files.
   --br             - Convert new line characters to line breaks in (X)HTML
                      output. Disabled by default.
-  --no--br         - Do not convert new line characters to line breaks in
+  --no-br          - Do not convert new line characters to line breaks in
                      (X)HTML output.
   --no-space-trim  - Do not reduce two or more consecutive spaces to one
                      single space character.

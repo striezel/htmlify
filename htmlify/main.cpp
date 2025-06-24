@@ -87,7 +87,7 @@ void showHelp(const std::string& name)
             << "  --no-list        - Do not parse [LIST] codes when creating (X)HTML files.\n"
             << "  --br             - Convert new line characters to line breaks in (X)HTML\n"
             << "                     output. Disabled by default.\n"
-            << "  --no--br         - Do not convert new line characters to line breaks in\n"
+            << "  --no-br          - Do not convert new line characters to line breaks in\n"
             << "                     (X)HTML output.\n"
             << "  --no-space-trim  - Do not reduce two or more consecutive spaces to one\n"
             << "                     single space character.\n"
