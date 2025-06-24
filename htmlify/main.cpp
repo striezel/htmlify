@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of htmlify.
-    Copyright (C) 2012, 2013, 2016, 2024  Dirk Stolle
+    Copyright (C) 2012, 2013, 2016, 2024, 2025  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -45,77 +45,65 @@ const int rcFileError        = 2;
 const int rcConversionFail   = 3;
 #endif
 
-void showGPLNotice()
-{
-  std::cout << "htmlify\n"
-            << "  Copyright (C) 2012, 2013 Dirk Stolle\n"
-            << "\n"
-            << "  This programme is free software: you can redistribute it and/or\n"
-            << "  modify it under the terms of the GNU General Public License as published\n"
-            << "  by the Free Software Foundation, either version 3 of the License, or\n"
-            << "  (at your option) any later version.\n"
-            << "\n"
-            << "  This programme is distributed in the hope that they will be useful,\n"
-            << "  but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
-            << "  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the\n"
-            << "  GNU General Public License for more details.\n"
-            << "\n"
-            << "  You should have received a copy of the GNU General Public License\n"
-            << "  along with this programme.  If not, see <http://www.gnu.org/licenses/>.\n"
-            << "\n";
-}
-
 void showVersion()
 {
-  showGPLNotice();
   #ifndef NO_STRING_CONVERSION
   std::cout << "htmlify, version 0.08c, 2013-03-31\n";
   #else
   std::cout << "htmlify, version 0.08c~no-conv, 2013-03-31\n";
   #endif
+  std::cout << '\n'
+            << "Copyright (C) 2012, 2013  Dirk Stolle\n"
+            << "License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>\n"
+            << "This is free software: you are free to change and redistribute it under the\n"
+            << "terms of the GNU General Public License version 3 or any later version.\n"
+            << "There is NO WARRANTY, to the extent permitted by law.\n";
 }
 
 void showHelp(const std::string& name)
 {
   std::cout << "\n" << name << " [--html|--xhtml] FILENAME\n"
+            << '\n'
+            << "Converts BB code text input to proper HTML or XHTML snippets.\n"
+            << '\n'
             << "options:\n"
-            << "  --help           - displays this help message and quits\n"
+            << "  --help           - Displays this help message and quits\n"
             << "  -?               - same as --help\n"
-            << "  --version        - displays the version of the programme and quits\n"
+            << "  --version        - Displays the version of the program and quits.\n"
             << "  -v               - same as --version\n"
-            << "  FILENAME         - adds file FILENAME to the list of text files that should\n"
-            << "                     be processed. The file must exist, or the programme will\n"
+            << "  FILENAME         - Adds file FILENAME to the list of text files that should\n"
+            << "                     be processed. The file must exist, or the program will\n"
             << "                     abort. Can be repeated multiple times for different\n"
             << "                     files.\n"
-            << "  --html           - uses HTML (4.01) syntax for generated files. Enabled by\n"
+            << "  --html           - Uses HTML (4.01) syntax for generated files. Enabled by\n"
             << "                     default.\n"
-            << "  --xhtml          - uses XHTML syntax for generated files. Mutually exclusive\n"
+            << "  --xhtml          - Uses XHTML syntax for generated files. Mutually exclusive\n"
             << "                     with --html.\n"
-            << "  --trim=PREFIX    - removes PREFIX from link URLs, if they start with PREFIX.\n"
+            << "  --trim=PREFIX    - Removes PREFIX from link URLs, if they start with PREFIX.\n"
             #ifndef NO_STRING_CONVERSION
-            << "  --utf8           - content of input files is encoded in UTF-8 and will be\n"
+            << "  --utf8           - Content of input files is encoded in UTF-8 and will be\n"
             << "                     converted to ISO-8859-1 before processing.\n"
             #endif
-            << "  --no-list        - do not parse [LIST] codes when creating (X)HTML files.\n"
-            << "  --br             - convert new line characters to line breaks in (X)HTML\n"
+            << "  --no-list        - Do not parse [LIST] codes when creating (X)HTML files.\n"
+            << "  --br             - Convert new line characters to line breaks in (X)HTML\n"
             << "                     output. Disabled by default.\n"
-            << "  --no--br         - do not convert new line characters to line breaks in\n"
+            << "  --no--br         - Do not convert new line characters to line breaks in\n"
             << "                     (X)HTML output.\n"
-            << "  --no-space-trim  - do not reduce two or more consecutive spaces to one\n"
+            << "  --no-space-trim  - Do not reduce two or more consecutive spaces to one\n"
             << "                     single space character.\n"
-            << "  --table=CLASS    - sets the class for grids in <table> to CLASS.\n"
-            << "  --row=CLASS      - sets the class for grids in <tr> to CLASS.\n"
-            << "  --cell=CLASS     - sets the class for grids in <td> to CLASS.\n"
-            << "  --std-classes    - sets the 'standard' classes for the three class options.\n"
+            << "  --table=CLASS    - Sets the class for grids in <table> to CLASS.\n"
+            << "  --row=CLASS      - Sets the class for grids in <tr> to CLASS.\n"
+            << "  --cell=CLASS     - Sets the class for grids in <td> to CLASS.\n"
+            << "  --std-classes    - Sets the 'standard' classes for the three class options.\n"
             << "                     This is equivalent to specifying all these parameters:\n"
             << "                         --table=" << TableBBCode::DefaultTableClass << "\n"
             << "                         --row=" << TableBBCode::DefaultRowClass << "\n"
             << "                         --cell=" << TableBBCode::DefaultCellClass << "\n"
             << "  --max-table-width=WIDTH\n"
-            << "                   - sets the maximum width that is allowed for tables to\n"
+            << "                   - Sets the maximum width that is allowed for tables to\n"
             << "                     WIDTH pixels. Larger values will be discarded. Zero will\n"
             << "                     be interpreted as 'no limit'. The default value is 600.\n"
-            << "  --no-table-limit - no default max. table width will be set by the programme.\n"
+            << "  --no-table-limit - No default max. table width will be set by the program.\n"
             << "                     Mutually exclusive with --max-table-width=WIDTH.\n";
 }
 

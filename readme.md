@@ -11,6 +11,52 @@ snippets.
 The text is read from one or more input file(s), which have to be specified as
 command-line arguments to the program.
 
+## Usage
+
+```
+htmlify [--html|--xhtml] FILENAME
+
+Converts BB code text input to proper HTML or XHTML snippets.
+
+options:
+  --help           - Displays this help message and quits
+  -?               - same as --help
+  --version        - Displays the version of the program and quits.
+  -v               - same as --version
+  FILENAME         - Adds file FILENAME to the list of text files that should
+                     be processed. The file must exist, or the program will
+                     abort. Can be repeated multiple times for different
+                     files.
+  --html           - Uses HTML (4.01) syntax for generated files. Enabled by
+                     default.
+  --xhtml          - Uses XHTML syntax for generated files. Mutually exclusive
+                     with --html.
+  --trim=PREFIX    - Removes PREFIX from link URLs, if they start with PREFIX.
+  --utf8           - Content of input files is encoded in UTF-8 and will be
+                     converted to ISO-8859-1 before processing.
+  --no-list        - Do not parse [LIST] codes when creating (X)HTML files.
+  --br             - Convert new line characters to line breaks in (X)HTML
+                     output. Disabled by default.
+  --no--br         - Do not convert new line characters to line breaks in
+                     (X)HTML output.
+  --no-space-trim  - Do not reduce two or more consecutive spaces to one
+                     single space character.
+  --table=CLASS    - Sets the class for grids in <table> to CLASS.
+  --row=CLASS      - Sets the class for grids in <tr> to CLASS.
+  --cell=CLASS     - Sets the class for grids in <td> to CLASS.
+  --std-classes    - Sets the 'standard' classes for the three class options.
+                     This is equivalent to specifying all these parameters:
+                         --table=grid_table
+                         --row=grid_tr
+                         --cell=grid_td
+  --max-table-width=WIDTH
+                   - Sets the maximum width that is allowed for tables to
+                     WIDTH pixels. Larger values will be discarded. Zero will
+                     be interpreted as 'no limit'. The default value is 600.
+  --no-table-limit - No default max. table width will be set by the program.
+                     Mutually exclusive with --max-table-width=WIDTH.
+```
+
 ## Building htmlify from source
 
 ### Prerequisites
