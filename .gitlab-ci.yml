@@ -13,7 +13,7 @@ build_gcc:
     - apt-get -y install catch2 cmake libxml2 libxml2-dev pkg-config zlib1g-dev
     # Remove parts of the submodule that are not used but would get into CI's
     # way when linting.
-    - rm -rf ./pmdb/libstriezel/archive ./pmdb/libstriezel/common/graphics ./pmdb/libstriezel/common/gui ./pmdb/libstriezel/tests ./pmdb/code/templates ./pmdb/tests
+    - rm -rf ./pmdb/libstriezel/archive ./pmdb/libstriezel/common/graphics ./pmdb/libstriezel/common/gui ./pmdb/libstriezel/tests ./pmdb/code/templates ./pmdb/code/html_generation.cpp ./pmdb/tests
   script:
     - ./pmdb/ci/cpplint.sh
     - mkdir ./build
@@ -30,7 +30,7 @@ build_clang:
     - apt-get -y install catch2 cmake clang libxml2 libxml2-dev pkg-config zlib1g-dev
     # Remove parts of the submodule that are not used but would get into CI's
     # way when linting.
-    - rm -rf ./pmdb/libstriezel/archive ./pmdb/libstriezel/common/graphics ./pmdb/libstriezel/common/gui ./pmdb/libstriezel/tests ./pmdb/code/templates ./pmdb/tests
+    - rm -rf ./pmdb/libstriezel/archive ./pmdb/libstriezel/common/graphics ./pmdb/libstriezel/common/gui ./pmdb/libstriezel/tests ./pmdb/code/templates  ./pmdb/code/html_generation.cpp ./pmdb/tests
     - export CC=clang && export CXX=clang++
   script:
     - ./pmdb/ci/cpplint.sh
