@@ -35,6 +35,7 @@
 #include "../pmdb/code/bbcode/HorizontalRuleBBCode.hpp"
 #include "../pmdb/code/bbcode/ListBBCode.hpp"
 #include "../pmdb/code/bbcode/TableBBCode.hpp"
+#include "../pmdb/code/bbcode/TableClasses.hpp"
 #include "TrimmingBBCodes.hpp"
 #include "htmlifyPostProcessors.hpp"
 
@@ -96,9 +97,9 @@ void showHelp(const std::string& name)
             << "  --cell=CLASS     - Sets the class for grids in <td> to CLASS.\n"
             << "  --std-classes    - Sets the 'standard' classes for the three class options.\n"
             << "                     This is equivalent to specifying all these parameters:\n"
-            << "                         --table=" << TableBBCode::DefaultTableClass << "\n"
-            << "                         --row=" << TableBBCode::DefaultRowClass << "\n"
-            << "                         --cell=" << TableBBCode::DefaultCellClass << "\n"
+            << "                         --table=" << TableClasses::DefaultTableClass << "\n"
+            << "                         --row=" << TableClasses::DefaultRowClass << "\n"
+            << "                         --cell=" << TableClasses::DefaultCellClass << "\n"
             << "  --max-table-width=WIDTH\n"
             << "                   - Sets the maximum width that is allowed for tables to\n"
             << "                     WIDTH pixels. Larger values will be discarded. Zero will\n"
@@ -120,9 +121,7 @@ int main(int argc, char* argv[])
   bool hasSet_nl2br = false;
   bool nl2br = false;
   bool spaceTrim = true;
-  std::string classTable;
-  std::string classRow;
-  std::string classCell;
+  TableClasses tableClasses(true);
   unsigned int tableLimit = 0;
   bool hasSetTableLimit = false;
 
@@ -254,21 +253,21 @@ int main(int argc, char* argv[])
         }//param == no-space-trim
         else if ((param.substr(0,8) == "--table=") && (param.length() > 8))
         {
-          classTable = param.substr(8);
+          tableClasses.table = param.substr(8);
         }//param == 'table=...'
         else if ((param.substr(0,6) == "--row=") && (param.length() > 6))
         {
-          classRow = param.substr(6);
+          tableClasses.row = param.substr(6);
         }//param == 'row=...'
         else if ((param.substr(0,7) == "--cell=") && (param.length() > 7))
         {
-          classCell = param.substr(7);
+          tableClasses.cell = param.substr(7);
         }//param == 'cell=...'
         else if ((param == "--std-classes") || (param == "--classes") || (param == "--default-classes"))
         {
-          classTable = TableBBCode::DefaultTableClass;
-          classRow   = TableBBCode::DefaultRowClass;
-          classCell  = TableBBCode::DefaultCellClass;
+          tableClasses.table = TableClasses::DefaultTableClass;
+          tableClasses.row   = TableClasses::DefaultRowClass;
+          tableClasses.cell  = TableClasses::DefaultCellClass;
         }//param == std-classes
         else if ((param == "--width-limit") || (param == "--max-table-width"))
         {
@@ -360,9 +359,9 @@ int main(int argc, char* argv[])
     return rcInvalidParameter;
   }
 
-  if (classTable.empty()) classTable = TableBBCode::DefaultTableClass;
-  if (classRow.empty())   classRow   = TableBBCode::DefaultRowClass;
-  if (classCell.empty())  classCell  = TableBBCode::DefaultCellClass;
+  if (tableClasses.table.empty()) tableClasses.table = TableClasses::DefaultTableClass;
+  if (tableClasses.row.empty())   tableClasses.row   = TableClasses::DefaultRowClass;
+  if (tableClasses.cell.empty())  tableClasses.cell  = TableClasses::DefaultCellClass;
 
   if (!hasSetTableLimit)
   {
@@ -392,7 +391,7 @@ int main(int argc, char* argv[])
   // tag for unordered lists
   ListBBCode list_unordered("list", true);
   // tables
-  TableBBCode table("table", true, classTable, classRow, classCell, tableLimit);
+  TableBBCode table("table", tableClasses, tableLimit);
   // hr code
   HorizontalRuleBBCode hr("hr", standard);
 
@@ -433,7 +432,7 @@ int main(int argc, char* argv[])
   KillSpacesBeforeNewline eatRedundantSpaces;
   ListNewlinePreProcessor preProc_List;
   ShortenDoubleSpaces preProc_Spaces;
-  TablePreprocessor table_killLF("tr", "td");
+  TablePreProcessor table_killLF("tr", "td");
   TablePostProcessor table_indent;
   TDR_PostProcessor tdr_post;
 

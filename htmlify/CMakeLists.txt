@@ -17,6 +17,7 @@ set(htmlify_sources
     ../pmdb/code/bbcode/SimpleBBCode.cpp
     ../pmdb/code/bbcode/SimpleTemplateBBCode.cpp
     ../pmdb/code/bbcode/TableBBCode.cpp
+    ../pmdb/code/bbcode/TableClasses.cpp
     ../pmdb/code/bbcode/quotes.cpp
     ../pmdb/libstriezel/common/StringUtils.cpp
     ../pmdb/libstriezel/encoding/StringConversion.cpp

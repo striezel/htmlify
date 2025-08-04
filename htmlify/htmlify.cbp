@@ -77,6 +77,8 @@
 		<Unit filename="../pmdb/code/bbcode/SimpleTplAmpTransformBBCode.hpp" />
 		<Unit filename="../pmdb/code/bbcode/TableBBCode.cpp" />
 		<Unit filename="../pmdb/code/bbcode/TableBBCode.hpp" />
+		<Unit filename="../pmdb/code/bbcode/TableClasses.cpp" />
+		<Unit filename="../pmdb/code/bbcode/TableClasses.hpp" />
 		<Unit filename="../pmdb/code/bbcode/TextProcessor.hpp" />
 		<Unit filename="../pmdb/code/bbcode/quotes.cpp" />
 		<Unit filename="../pmdb/code/bbcode/quotes.hpp" />
