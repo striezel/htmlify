@@ -23,7 +23,7 @@ build_gcc:
     - ctest -V
 
 build_clang:
-  image: debian:12-slim
+  image: debian:13-slim
   stage: build
   before_script:
     - apt-get update
