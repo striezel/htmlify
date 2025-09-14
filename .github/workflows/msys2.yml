@@ -3,7 +3,15 @@ name: MSYS2
 on: push
 
 jobs:
-  msys2_mingw64:
+  msys2:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - msystem: mingw64
+            package: x86_64
+          - msystem: ucrt64
+            package: ucrt-x86_64
     runs-on: windows-2022
     defaults:
       run:
@@ -17,18 +25,18 @@ jobs:
           persist-credentials: false
       - uses: msys2/setup-msys2@v2
         with:
-          msystem: mingw64
+          msystem: ${{matrix.msystem}}
           update: true
           install: >-
             git
-            mingw-w64-x86_64-cmake
-            mingw-w64-x86_64-gcc
-            mingw-w64-x86_64-ninja
-            mingw-w64-x86_64-pkg-config
-            mingw-w64-x86_64-libiconv
+            mingw-w64-${{matrix.package}}-cmake
+            mingw-w64-${{matrix.package}}-gcc
+            mingw-w64-${{matrix.package}}-ninja
+            mingw-w64-${{matrix.package}}-pkg-config
+            mingw-w64-${{matrix.package}}-libiconv
       - name: Build
         run: |
-          export MSYSTEM=MINGW64
+          export MSYSTEM=$(echo ${{matrix.msystem}} | tr '[:lower:]' '[:upper:]')
           export CXX=g++
           export CC=gcc
           cd "$GITHUB_WORKSPACE"
@@ -39,7 +47,7 @@ jobs:
           ctest -V
       - name: Build statically linked
         run: |
-          export MSYSTEM=MINGW64
+          export MSYSTEM=$(echo ${{matrix.msystem}} | tr '[:lower:]' '[:upper:]')
           export CXX=g++
           export CC=gcc
           cd "$GITHUB_WORKSPACE"
@@ -49,7 +57,7 @@ jobs:
           cmake --build . -j2
       - name: Collect statically linked artifacts
         run: |
-          export MSYSTEM=MINGW64
+          export MSYSTEM=$(echo ${{matrix.msystem}} | tr '[:lower:]' '[:upper:]')
           cd "$GITHUB_WORKSPACE"
           mkdir -p "$GITHUB_WORKSPACE"/artifacts
           # binary file
@@ -65,6 +73,6 @@ jobs:
       - name: Archive build artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: htmlify-msys2-win64
+          name: htmlify-msys2-${{matrix.msystem}}
           path: htmlify_*_win64.zip
           if-no-files-found: error
