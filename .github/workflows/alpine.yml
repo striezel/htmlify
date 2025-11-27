@@ -14,7 +14,7 @@ jobs:
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
       # Checks-out the repository under $GITHUB_WORKSPACE.
       - name: Git checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           submodules: 'recursive'
           fetch-depth: 0
@@ -52,7 +52,7 @@ jobs:
           mv artifacts htmlify-$VERSION
           tar czf htmlify_${VERSION}_linux-amd64-generic.tar.gz htmlify-$VERSION
       - name: Archive build artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: htmlify-linux-amd64-generic
           path: htmlify_*_linux-amd64-generic.tar.gz
