@@ -6,7 +6,7 @@
 [![GitHub CI MSYS2 status](https://github.com/striezel/htmlify/workflows/MSYS2/badge.svg)](https://github.com/striezel/htmlify/actions)
 
 htmlify is a small command-line tool that can be used to transform BB code
-text input (as seen in some bulletin board softwares) to proper HTML or XHTML
+text input (as seen in some bulletin board software) to proper HTML or XHTML
 snippets.
 The text is read from one or more input file(s), which have to be specified as
 command-line arguments to the program.
